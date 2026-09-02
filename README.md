@@ -15,7 +15,7 @@
 
 ```bash
 git clone https://github.com/Cat-Shell/Cat-Shell
-cd cat-shell
+cd Cat-Shell
 g++ -std=c++17 -o cat_shell cat_shell.cpp
 sudo cp cat_shell /usr/local/bin/
 ```
