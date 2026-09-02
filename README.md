@@ -14,7 +14,7 @@
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/your-org/cat-shell
+git clone https://github.com/Cat-Shell/cat-shell
 cd cat-shell
 g++ -std=c++17 -o cat_shell cat_shell.cpp
 sudo cp cat_shell /usr/local/bin/
