@@ -1,14 +1,17 @@
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <cstdlib>
 
-const std::string PROMPT = "🐱 > ";
+std::string get_prompt() {
+    return "🐱 " +  std::filesystem::current_path().string() + " > ";
+}
 
 void print_welcome() {
     std::cout << R"(
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.1
+  > ^ <   Cat-Shell v0.2
 
 )";
 }
@@ -17,6 +20,7 @@ void print_help() {
     std::cout << "help - эта справка\n";
     std::cout << "clear - очистить экран\n";
     std::cout << "meow - мяукнуть\n";
+    std::cout << "pwd - текущий путь\n";
     std::cout << "exit - выйти\n";
 }
 
@@ -26,7 +30,7 @@ int main() {
     std::string input;
 
     while (true) {
-        std::cout << PROMPT;
+        std::cout << get_prompt();
         std::getline(std::cin, input);
 
         if (input == "exit") {
@@ -37,6 +41,8 @@ int main() {
             std::cout << "Мяу! 😸\n";
         } else if (input == "clear") {
             std::cout << "\033[H\033[J";
+        } else if (input == "pwd") {
+            std::cout << std::filesystem::current_path() << "\n";
         } else if (!input.empty()) {
             std::cout << "Команда не найдена. Напиши help.\n";
         }
