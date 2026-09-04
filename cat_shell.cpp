@@ -11,7 +11,7 @@ void print_welcome() {
     std::cout << R"(
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2
+  > ^ <   Cat-Shell v0.2.0
 
 )";
 }
