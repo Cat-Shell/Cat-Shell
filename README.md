@@ -6,7 +6,7 @@
 ```text
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.0
+  > ^ <   Cat-Shell v0.2.1
 ```
 
 ---
@@ -38,7 +38,7 @@ $ cat-shell
 
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.0
+  > ^ <   Cat-Shell v0.2.1
 
 🐱 > help
 help - эта справка
