@@ -11,7 +11,7 @@ void print_welcome() {
     std::cout << R"(
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.0
+  > ^ <   Cat-Shell v0.2.1
 
 )";
 }
@@ -38,7 +38,7 @@ int main() {
         } else if (input == "help") {
             print_help();
         } else if (input == "meow") {
-            std::cout << "Мяу! 😸\n";
+            std::cout << "Мяу!\n";
         } else if (input == "clear") {
             std::cout << "\033[H\033[J";
         } else if (input == "pwd") {
