@@ -2,6 +2,19 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <Windows.h>
+
+// ! пространство имен std
+using namespace std;
+
+// ! Функция для вывода списка файлов и папок в текущей директории
+void ls() {
+    // ! Используем std::filesystem для итерации по текущей директории
+    for (const auto &entry : std::filesystem::directory_iterator(std::filesystem::current_path())) {
+        // ! Выводим имя файла или папки
+        cout << entry.path().filename().string() << "\n";
+    }
+}
 
 // ! Функция для получения текущего пути и формирования приглашения
 std::string get_prompt() {
@@ -28,6 +41,10 @@ void print_help() {
 }
 
 int main() {
+
+    SetConsoleOutputCP(CP_UTF8);
+    setlocale(LC_ALL, ".UTF8");
+
     // ! Печатаем приветственное сообщение
     print_welcome();
 
@@ -69,6 +86,11 @@ int main() {
         else if (!input.empty()) {
             std::cout << "Команда не найдена. Напиши help.\n";
         }
+
+        // !Обрабатываем команду ls для вывода списка файлов и папок
+            else if (input == "ls") {
+                ls();
+            }
     }
 
     return 0;
