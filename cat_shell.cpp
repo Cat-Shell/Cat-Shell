@@ -2,11 +2,26 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <Windows.h>
 
-std::string get_prompt() {
-    return "🐱 " +  std::filesystem::current_path().string() + " > ";
+// ! пространство имен std
+using namespace std;
+
+// ! Функция для вывода списка файлов и папок в текущей директории
+void ls() {
+    // ! Используем std::filesystem для итерации по текущей директории
+    for (const auto &entry : std::filesystem::directory_iterator(std::filesystem::current_path())) {
+        // ! Выводим имя файла или папки
+        cout << entry.path().filename().string() << "\n";
+    }
 }
 
+// ! Функция для получения текущего пути и формирования приглашения
+std::string get_prompt() {
+    return "🐱 " + std::filesystem::current_path().string() + " > ";
+}
+
+// ! Функция для печати приветственного сообщения
 void print_welcome() {
     std::cout << R"(
   /\_/\
@@ -16,6 +31,7 @@ void print_welcome() {
 )";
 }
 
+// ! Функция для печати справки по командам
 void print_help() {
     std::cout << "help - эта справка\n";
     std::cout << "clear - очистить экран\n";
@@ -25,27 +41,56 @@ void print_help() {
 }
 
 int main() {
+
+    SetConsoleOutputCP(CP_UTF8);
+    setlocale(LC_ALL, ".UTF8");
+
+    // ! Печатаем приветственное сообщение
     print_welcome();
 
     std::string input;
 
     while (true) {
+        // ! Выводим приглашение с текущим путём
         std::cout << get_prompt();
+
+        // ! Получаем команду пользователя
         std::getline(std::cin, input);
 
+        // ! Проверяем команду выхода из Cat-Shell
         if (input == "exit") {
             break;
-        } else if (input == "help") {
+        }
+
+        // ! Обрабатываем команду help для вывода справки
+        else if (input == "help") {
             print_help();
-        } else if (input == "meow") {
+        }
+
+        // ! Обрабатываем команду meow для вывода мяуканья
+        else if (input == "meow") {
             std::cout << "Мяу!\n";
-        } else if (input == "clear") {
+        }
+
+        // ! Обрабатываем команду clear для очистки экрана
+        else if (input == "clear") {
             std::cout << "\033[H\033[J";
-        } else if (input == "pwd") {
+        }
+
+        // ! Обрабатываем команду pwd для вывода текущего пути
+        else if (input == "pwd") {
             std::cout << std::filesystem::current_path() << "\n";
-        } else if (!input.empty()) {
+        }
+
+        // ! Проверяем неизвестные команды
+        else if (!input.empty()) {
             std::cout << "Команда не найдена. Напиши help.\n";
         }
+
+        // !Обрабатываем команду ls для вывода списка файлов и папок
+            else if (input == "ls") {
+                ls();
+            }
     }
 
     return 0;
