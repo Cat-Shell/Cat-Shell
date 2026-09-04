@@ -37,6 +37,7 @@ void print_help() {
     std::cout << "clear - очистить экран\n";
     std::cout << "meow - мяукнуть\n";
     std::cout << "pwd - текущий путь\n";
+    std::cout << "ls - список файлов и папок\n";
     std::cout << "exit - выйти\n";
 }
 
@@ -82,15 +83,16 @@ int main() {
             std::cout << std::filesystem::current_path() << "\n";
         }
 
+        // !Обрабатываем команду ls для вывода списка файлов и папок
+        else if (input == "ls") {
+                ls();
+        }
+
         // ! Проверяем неизвестные команды
-        else if (!input.empty()) {
+        else {
             std::cout << "Команда не найдена. Напиши help.\n";
         }
 
-        // !Обрабатываем команду ls для вывода списка файлов и папок
-            else if (input == "ls") {
-                ls();
-            }
     }
 
     return 0;
