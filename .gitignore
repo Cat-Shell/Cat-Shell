@@ -1,0 +1,22 @@
+# Compiled files and executable files
+cat_shell
+cat_shell.exe
+a.out
+*.o
+*.obj
+
+# Build folders
+build/
+cmake-build-debug/
+cmake-build-release/
+out/
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.suo
+*.user
+
+# System files
+.DS_Store
+Thumbs.db

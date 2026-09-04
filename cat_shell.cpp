@@ -3,26 +3,19 @@
 #include <string>
 #include <cstdlib>
 
-// ! для краткого написания кода используем пространство имен std
-using namespace std;
-
-
-// ! Функция для получения текущего пути и формирования приглашения
 std::string get_prompt() {
     return "🐱 " +  std::filesystem::current_path().string() + " > ";
 }
 
-// ! Функция для печати приветственного сообщения 
 void print_welcome() {
     std::cout << R"(
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2
+  > ^ <   Cat-Shell v0.2.1
 
 )";
 }
 
-// ! Функция для печати справки по командам
 void print_help() {
     std::cout << "help - эта справка\n";
     std::cout << "clear - очистить экран\n";
@@ -32,8 +25,6 @@ void print_help() {
 }
 
 int main() {
-
-    // ! Печатаем приветственное сообщение
     print_welcome();
 
     std::string input;
@@ -42,28 +33,17 @@ int main() {
         std::cout << get_prompt();
         std::getline(std::cin, input);
 
-        // ! Обработка команд
         if (input == "exit") {
             break;
-        } 
-        // ! Обработка команды help для вывода справки
-        else if (input == "help") {
+        } else if (input == "help") {
             print_help();
-        } 
-        // ! Обработка команды meow для мяуканья
-        else if (input == "meow") {
-            std::cout << "Мяу! 😸\n";
-        } 
-        // ! Обработка команды clear для очистки экрана
-        else if (input == "clear") {
+        } else if (input == "meow") {
+            std::cout << "Мяу!\n";
+        } else if (input == "clear") {
             std::cout << "\033[H\033[J";
-        }
-        // ! Обработка команды pwd для вывода текущего пути
-        else if (input == "pwd") {
+        } else if (input == "pwd") {
             std::cout << std::filesystem::current_path() << "\n";
-        }
-        // ! Обработка неизвестных команд
-        else if (!input.empty()) {
+        } else if (!input.empty()) {
             std::cout << "Команда не найдена. Напиши help.\n";
         }
     }
