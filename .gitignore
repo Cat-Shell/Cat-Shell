@@ -4,6 +4,7 @@ cat_shell.exe
 a.out
 *.o
 *.obj
+*.exe
 
 # Build folders
 build/
@@ -20,4 +21,4 @@ out/
 # System files
 .DS_Store
 Thumbs.db
-*.exe
+
