@@ -3,26 +3,13 @@
 #include <string>
 #include <cstdlib>
 
-// Включаем Windows.h только если компилируем под Windows
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
 using namespace std;
 
-// Функция для вывода списка файлов и папок в текущей директории
-void ls() {
-    for (const auto &entry : filesystem::directory_iterator(filesystem::current_path())) {
-        cout << entry.path().filename().string() << "\n";
-    }
-}
-
-// Функция для получения текущего пути и формирования приглашения
-string get_prompt() {
-    return "🐱 " + filesystem::current_path().string() + " > ";
-}
-
-// Функция для печати приветственного сообщения
+// Печать приветственного сообщения
 void print_welcome() {
     cout << R"(
   /\_/\
@@ -32,8 +19,30 @@ void print_welcome() {
 )";
 }
 
-// Функция для печати справки по командам
-void print_help() {
+// Вывод списка файлов и папок
+void cmd_ls() {
+    for (const auto &entry : filesystem::directory_iterator(filesystem::current_path())) {
+        cout << entry.path().filename().string() << "\n";
+    }
+}
+
+// Печать текущего пути
+void cmd_pwd() {
+    cout << filesystem::current_path().string() << "\n";
+}
+
+// Очистка экрана
+void cmd_clear() {
+    cout << "\033[H\033[J";
+}
+
+// Мяуканье
+void cmd_meow() {
+    cout << "Мяу!\n";
+}
+
+// Печать справки по командам
+void cmd_help() {
     cout << "help - эта справка\n";
     cout << "clear - очистить экран\n";
     cout << "meow - мяукнуть\n";
@@ -42,8 +51,38 @@ void print_help() {
     cout << "exit - выйти\n";
 }
 
+// Обработка и выполнение команд
+bool execute_command(const string &input) {
+    if (input.empty()) {
+        return true; // Пропуск пустой строки
+    }
+    if (input == "exit") {
+        return false; // Сигнал для выхода из цикла
+    }
+    
+    if (input == "help") {
+        cmd_help();
+    } else if (input == "meow") {
+        cmd_meow();
+    } else if (input == "clear") {
+        cmd_clear();
+    } else if (input == "pwd") {
+        cmd_pwd();
+    } else if (input == "ls") {
+        cmd_ls();
+    } else {
+        cout << "Cat-Shell: команда не найдена: " << input << "\n";
+    }
+    
+    return true;
+}
+
+// Формирование строки приглашения (prompt)
+string get_prompt() {
+    return "🐱 " + filesystem::current_path().string() + " > ";
+}
+
 int main() {
-    // Настройка кодировки для Windows
 #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
     setlocale(LC_ALL, ".UTF8");
@@ -52,32 +91,14 @@ int main() {
     print_welcome();
 
     string input;
+    bool running = true;
 
-    while (true) {
+    while (running) {
         cout << get_prompt();
         getline(cin, input);
-
-        if (input == "exit") {
-            break;
-        }
-        else if (input == "help") {
-            print_help();
-        }
-        else if (input == "meow") {
-            cout << "Мяу!\n";
-        }
-        else if (input == "clear") {
-            cout << "\033[H\033[J";
-        }
-        else if (input == "pwd") {
-            cout << filesystem::current_path().string() << "\n";
-        }
-        else if (input == "ls") {
-            ls();
-        }
-        else if (!input.empty()) {
-            cout << "Cat-Shell: команда не найдена: " << input << "\n";
-        }
+        
+        // Передаем команду на выполнение. Если вернулся false - выходим
+        running = execute_command(input);
     }
 
     return 0;
