@@ -54,8 +54,7 @@ void cmd_help() {
 bool execute_command(const string &input) {
     if (input.empty()) {
         return true; // Пропуск пустой строки
-    }
-    if (input == "exit") {
+    } if (input == "exit") {
         return false; // Сигнал для выхода из цикла
     }
 
