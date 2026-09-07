@@ -31,7 +31,6 @@ sudo cp cat_shell /usr/local/bin/
 | `meow`  | Мяукнуть |
 | `pwd`   | Показать текущий путь |
 | `ls`    | Список файлов и папок в текущей директории |
-| `cd <path>` | Сменить текущую директорию |
 | `exit`  | Выйти из оболочки |
 
 ---
@@ -45,23 +44,21 @@ $ cat-shell
  ( o.o )
   > ^ <   Cat-Shell v0.2.1
 
-🐱 /home/user > help
+🐱 > help
 help  - эта справка
 clear - очистить экран
 meow  - мяукнуть
 pwd   - текущий путь
 ls    - список файлов и папок
-cd    - сменить директорию
 exit  - выйти
 
-🐱 /home/user > meow
+🐱 > meow
 Мяу!
 
-🐱 /home/user > cd Documents
-🐱 /home/user/Documents > pwd
-/home/user/Documents
+🐱 > pwd
+/home/user
 
-🐱 /home/user/Documents > exit
+🐱 > exit
 ```
 
 ---
