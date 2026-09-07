@@ -63,6 +63,19 @@ exit  - выйти
 
 ---
 
+## 💖 Support the Project
+
+If you enjoy **Cat-Shell** and want to support its development, you can do so here:
+
+[![DonationAlerts](https://img.shields.io/badge/DonationAlerts-Support-blue.svg)](https://www.donationalerts.com/r/felinefantasy)
+
+Your support helps me:
+- 🐱 Keep developing Cat-Shell
+- 🌟 Add new features and commands
+- ☕ Stay awake while coding at 4 AM
+
+Every little bit is appreciated! ❤️
+
 ## 👥 Authors
 
 - **FelineFantasy** — [GitHub](https://github.com/FelineFantasy)
