@@ -1,7 +1,7 @@
 # 🐱 Cat-Shell
 
-**Cat-Shell** — это минималистичная командная оболочка с кошачьей эстетикой.  
-Она простая, игривая и идеально подходит для изучения или просто для удовольствия.
+**Cat-Shell** is a minimalist command shell with a feline aesthetic.  
+It's simple, playful, and perfect for learning or just for fun.
 
 ```text
   /\_/\
@@ -26,12 +26,12 @@ sudo cp cat_shell /usr/local/bin/
 
 | Command | Description |
 |---------|-------------|
-| `help`  | Показать список команд |
-| `clear` | Очистить экран |
-| `meow`  | Мяукнуть |
-| `pwd`   | Показать текущий путь |
-| `ls`    | Список файлов и папок в текущей директории |
-| `exit`  | Выйти из оболочки |
+| `help`  | Show list of commands |
+| `clear` | Clear the screen |
+| `meow`  | Meow |
+| `pwd`   | Show current working directory |
+| `ls`    | List files and folders in the current directory |
+| `exit`  | Exit the shell |
 
 ---
 
@@ -45,15 +45,15 @@ $ cat-shell
   > ^ <   Cat-Shell v0.2.1
 
 🐱 > help
-help  - эта справка
-clear - очистить экран
-meow  - мяукнуть
-pwd   - текущий путь
-ls    - список файлов и папок
-exit  - выйти
+help  - this help message
+clear - clear the screen
+meow  - meow
+pwd   - current working directory
+ls    - list files and folders
+exit  - exit
 
 🐱 > meow
-Мяу!
+Meow!
 
 🐱 > pwd
 /home/user
