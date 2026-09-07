@@ -71,7 +71,7 @@ bool execute_command(const string &input) {
     } else {
         cout << "Cat-Shell: команда не найдена: " << input << "\n";
     }
-    
+
     return true;
 }
 
@@ -94,7 +94,7 @@ int main() {
     while (running) {
         cout << get_prompt();
         getline(cin, input);
-        
+
         // Передаем команду на выполнение. Если вернулся false - выходим
         running = execute_command(input);
     }
