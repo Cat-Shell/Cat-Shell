@@ -58,13 +58,13 @@ bool execute_command(const string &input) {
     if (input == "exit") {
         return false; // Сигнал для выхода из цикла
     }
-    
+
     if (input == "help") {
         cmd_help();
-    } else if (input == "meow") {
-        cmd_meow();
     } else if (input == "clear") {
         cmd_clear();
+    } else if (input == "meow") {
+        cmd_meow();
     } else if (input == "pwd") {
         cmd_pwd();
     } else if (input == "ls") {
