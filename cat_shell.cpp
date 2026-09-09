@@ -52,7 +52,6 @@ void cmd_help() {
   exit           - выйти из оболочки
   
 Примеры:
-  cd /home/user
   ls
   meow
 )";
