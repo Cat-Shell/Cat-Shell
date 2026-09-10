@@ -8,40 +8,71 @@
 
 using namespace std;
 
-// Печать приветственного сообщения
+// ! Печать приветственного сообщения
 void print_welcome() {
     cout << R"(
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.1
+  > ^ <   Cat-Shell v0.2.2
 
 )";
 }
 
-// Вывод списка файлов и папок
+// ! Вывод списка файлов и папок
 void cmd_ls() {
+
+    cout << "Котенок перебирает файлы и папки в текущей папке, просим помяукать и подождать";
+    for (int i = 0; i < 3; i++) {
+        cout << ".";
+        Sleep(500);
+    }
+    cout << "\n";
+
+
     for (const auto &entry : filesystem::directory_iterator(filesystem::current_path())) {
         cout << entry.path().filename().string() << "\n";
     }
+
 }
 
-// Печать текущего пути
+// ! Печать текущего пути
 void cmd_pwd() {
     cout << filesystem::current_path().string() << "\n";
 }
 
-// Очистка экрана
+// ! Очистка экрана
 void cmd_clear() {
+
+    cout << "Котик уже бежит все слизывать";
+    for (int i = 0; i < 3; i++) {
+        cout << ".";
+        Sleep(500);
+    }
+
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+
     cout << "\033[H\033[J";
 }
 
-// Мяуканье
+// ! Мяуканье
 void cmd_meow() {
     cout << "Мяу!\n";
 }
 
-// Печать справки по командам
+// ! Печать справки по командам
 void cmd_help() {
+
+    cout << "Котик торопиться достать листок с подсказками";
+    for (int i = 0; i < 3; i++) {
+        cout << ".";
+        Sleep(500);
+    }
+    cout << "\n";
+
     cout << R"(
 Доступные команды:
   help           - показать эту справку
@@ -57,12 +88,13 @@ void cmd_help() {
 )";
 }
 
-// Обработка и выполнение команд
+// ! Обработка и выполнение команд
 bool execute_command(const string &input) {
     if (input.empty()) {
-        return true; // Пропуск пустой строки
+        return true; // ! Пропуск пустой строки
     } if (input == "exit") {
-        return false; // Сигнал для выхода из цикла
+        cout << "Котик будет по тебе скучать(" << endl;
+        return false; // ! Сигнал для выхода из цикла
     }
 
     if (input == "help") {
@@ -77,16 +109,20 @@ bool execute_command(const string &input) {
         cmd_ls();
     } else {
         cout << "Cat-Shell: команда не найдена: " << input << "\n";
+        cout << "Котик не нашел ее" << endl;
     }
 
     return true;
 }
 
-// Формирование строки приглашения (prompt)
+// ! Формирование строки приглашения (prompt)
 string get_prompt() {
-    return "🐱 " + filesystem::current_path().string() + " > ";
+    cout << "котик ждет твоей команды." << endl;
+    return "🐱 " + filesystem::current_path().string() + "> ";
 }
 
+
+// ! Оснорвная функция
 int main() {
 #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
@@ -102,7 +138,7 @@ int main() {
         cout << get_prompt();
         getline(cin, input);
 
-        // Передаем команду на выполнение. Если вернулся false - выходим
+        // ! Передаем команду на выполнение. Если вернулся false - выходим
         running = execute_command(input);
     }
 
