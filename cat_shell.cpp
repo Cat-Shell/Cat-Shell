@@ -29,6 +29,7 @@ void print_welcome() {
   > ^ <   Cat-Shell v0.2.3
 
 )";
+    cout << "Котик ждет твоей команды.\n\n";
 }
 
 // ! Вывод списка файлов и папок
@@ -113,7 +114,6 @@ bool execute_command(const string &input) {
 
 // ! Формирование строки приглашения (prompt)
 string get_prompt() {
-    cout << "Котик ждет твоей команды." << endl;
     return "🐱 " + filesystem::current_path().string() + "> ";
 }
 
