@@ -35,12 +35,15 @@ void print_welcome() {
 // ! Вывод списка файлов и папок
 void cmd_ls() {
 
-    wait_dots("Котенок перебирает файлы и папки в текущей папке, просим помяукать и подождать");
+    wait_dots("Котенок перебирает файлы...");
 
-    for (const auto &entry : filesystem::directory_iterator(filesystem::current_path())) {
-        cout << entry.path().filename().string() << "\n";
+    try {
+        for (const auto &entry : filesystem::directory_iterator(filesystem::current_path())) {
+            cout << entry.path().filename().string() << "\n";
+        }
+    } catch (const filesystem::filesystem_error &e) {
+        cout << "Ошибка: " << e.what() << "\n";
     }
-
 }
 
 // ! Печать текущего пути
