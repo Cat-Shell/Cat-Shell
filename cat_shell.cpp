@@ -122,7 +122,7 @@ bool execute_command(const string &input) {
 
 // ! Формирование строки приглашения (prompt)
 string get_prompt() {
-    cout << "котик ждет твоей команды." << endl;
+    cout << "Котик ждет твоей команды." << endl;
     return "🐱 " + filesystem::current_path().string() + "> ";
 }
 
