@@ -61,6 +61,8 @@ void cmd_clear() {
     #else
         system("clear");
     #endif
+
+    print_welcome();
 }
 
 // ! Мяуканье
