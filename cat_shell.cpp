@@ -1,6 +1,8 @@
 #include <filesystem>
 #include <iostream>
 #include <string>
+#include <thread>
+#include <chrono>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -13,7 +15,7 @@ void print_welcome() {
     cout << R"(
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.2
+  > ^ <   Cat-Shell v0.2.3
 
 )";
 }
@@ -24,7 +26,7 @@ void cmd_ls() {
     cout << "Котенок перебирает файлы и папки в текущей папке, просим помяукать и подождать";
     for (int i = 0; i < 3; i++) {
         cout << ".";
-        Sleep(500);
+        this_thread::sleep_for(chrono::milliseconds(500));
     }
     cout << "\n";
 
@@ -46,7 +48,7 @@ void cmd_clear() {
     cout << "Котик уже бежит все слизывать";
     for (int i = 0; i < 3; i++) {
         cout << ".";
-        Sleep(500);
+        this_thread::sleep_for(chrono::milliseconds(500));
     }
 
     #ifdef _WIN32
@@ -69,7 +71,7 @@ void cmd_help() {
     cout << "Котик торопиться достать листок с подсказками";
     for (int i = 0; i < 3; i++) {
         cout << ".";
-        Sleep(500);
+        this_thread::sleep_for(chrono::milliseconds(500));
     }
     cout << "\n";
 
