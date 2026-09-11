@@ -10,6 +10,17 @@
 
 using namespace std;
 
+// ! Анимация ожидания: печатает msg, три точки с задержкой и перевод строки
+void wait_dots(const string &msg) {
+    cout << msg;
+    for (int i = 0; i < 3; i++) {
+        cout << ".";
+        cout.flush();  // ! Принудительно выводим точку до задержки
+        this_thread::sleep_for(chrono::milliseconds(500));
+    }
+    cout << "\n";
+}
+
 // ! Печать приветственного сообщения
 void print_welcome() {
     cout << R"(
@@ -23,14 +34,7 @@ void print_welcome() {
 // ! Вывод списка файлов и папок
 void cmd_ls() {
 
-    cout << "Котенок перебирает файлы и папки в текущей папке, просим помяукать и подождать";
-    for (int i = 0; i < 3; i++) {
-        cout << ".";
-        cout.flush();  // ! Принудительно выводим точку до задержки
-        this_thread::sleep_for(chrono::milliseconds(500));
-    }
-    cout << "\n";
-
+    wait_dots("Котенок перебирает файлы и папки в текущей папке, просим помяукать и подождать");
 
     for (const auto &entry : filesystem::directory_iterator(filesystem::current_path())) {
         cout << entry.path().filename().string() << "\n";
@@ -46,12 +50,7 @@ void cmd_pwd() {
 // ! Очистка экрана
 void cmd_clear() {
 
-    cout << "Котик уже бежит все слизывать";
-    for (int i = 0; i < 3; i++) {
-        cout << ".";
-        cout.flush();  // ! Принудительно выводим точку до задержки
-        this_thread::sleep_for(chrono::milliseconds(500));
-    }
+    wait_dots("Котик уже бежит все слизывать");
 
     #ifdef _WIN32
         system("cls");
@@ -68,13 +67,7 @@ void cmd_meow() {
 // ! Печать справки по командам
 void cmd_help() {
 
-    cout << "Котик торопиться достать листок с подсказками";
-    for (int i = 0; i < 3; i++) {
-        cout << ".";
-        cout.flush();  // ! Принудительно выводим точку до задержки
-        this_thread::sleep_for(chrono::milliseconds(500));
-    }
-    cout << "\n";
+    wait_dots("Котик торопиться достать листок с подсказками");
 
     cout << R"(
 Доступные команды:
