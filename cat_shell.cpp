@@ -58,8 +58,6 @@ void cmd_clear() {
     #else
         system("clear");
     #endif
-
-    cout << "\033[H\033[J";
 }
 
 // ! Мяуканье
