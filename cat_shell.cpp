@@ -26,6 +26,7 @@ void cmd_ls() {
     cout << "Котенок перебирает файлы и папки в текущей папке, просим помяукать и подождать";
     for (int i = 0; i < 3; i++) {
         cout << ".";
+        cout.flush();  // ! Принудительно выводим точку до задержки
         this_thread::sleep_for(chrono::milliseconds(500));
     }
     cout << "\n";
@@ -48,6 +49,7 @@ void cmd_clear() {
     cout << "Котик уже бежит все слизывать";
     for (int i = 0; i < 3; i++) {
         cout << ".";
+        cout.flush();  // ! Принудительно выводим точку до задержки
         this_thread::sleep_for(chrono::milliseconds(500));
     }
 
@@ -71,6 +73,7 @@ void cmd_help() {
     cout << "Котик торопиться достать листок с подсказками";
     for (int i = 0; i < 3; i++) {
         cout << ".";
+        cout.flush();  // ! Принудительно выводим точку до задержки
         this_thread::sleep_for(chrono::milliseconds(500));
     }
     cout << "\n";
