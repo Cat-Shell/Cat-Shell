@@ -35,7 +35,7 @@ void print_welcome() {
 // ! Вывод списка файлов и папок
 void cmd_ls() {
 
-    wait_dots("Котенок перебирает файлы...");
+    wait_dots("Котенок перебирает файлы");
 
     try {
         for (const auto &entry : filesystem::directory_iterator(filesystem::current_path())) {
