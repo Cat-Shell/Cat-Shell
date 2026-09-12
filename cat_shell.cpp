@@ -3,6 +3,7 @@
 #include <string>
 #include <thread>
 #include <chrono>
+#include <random> // ! библиотека для рандом числа
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -67,11 +68,26 @@ void cmd_clear() {
 
 // ! Мяуканье
 void cmd_meow() {
-    cout << "Мррр...\n";
-    cout << "Мур-мяу!\n";
-    cout << "Мяааау...\n";
-    cout << "Мяу!\n";
-    cout << "мр~\n";
+
+    // ! функции для создания рандом числа
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(1, 5);
+
+    // ! рандомное число перемещаем в переменную number
+    int number = dist(gen);
+
+    if (number == 1)
+        cout << "Мррр...\n";
+    else if (number == 2)
+        cout << "Мур-мяу!\n";
+    else if (number == 3)
+        cout << "Мяааау...\n";
+    else if (number == 4)
+        cout << "Мяу!\n";
+    else
+        cout << "мр~\n";
+
 }
 
 // ! Печать справки по командам
