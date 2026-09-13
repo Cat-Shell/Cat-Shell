@@ -33,6 +33,15 @@ void print_welcome() {
     cout << "Котик ждет твоей команды.\n\n";
 }
 
+
+// ! выводит ASCLL котиков
+
+void cmd_kitty() {
+
+
+
+}
+
 // ! Вывод списка файлов и папок
 void cmd_ls() {
 
@@ -129,6 +138,8 @@ bool execute_command(const string &input) {
         cmd_pwd();
     } else if (input == "ls") {
         cmd_ls();
+    } else if (input == "kitty") {
+
     } else {
         cout << "Cat-Shell: команда не найдена: " << input << "\n";
         cout << "Котик не нашел ее" << endl;
