@@ -35,10 +35,18 @@ void print_welcome() {
 
 
 // ! выводит ASCLL котиков
+void cmd_kitty(const std::string& emotion) {
 
-void cmd_kitty() {
+    if (emotion == "angry") {
 
+        cout << R"(
+        
+ /\_/\
+( O.O )            
+ > ^ <
+        )" << "\n";
 
+    }
 
 }
 
