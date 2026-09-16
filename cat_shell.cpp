@@ -35,16 +35,45 @@ void print_welcome() {
 
 
 // ! выводит ASCLL котиков
-void cmd_kitty(const std::string& emotion) {
+void cmd_kitty() {
 
-    if (emotion == "angry") {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(1, 4);
+
+    int emotional = dist(gen);
+
+    if (emotional == 1) {
 
         cout << R"(
-        
  /\_/\
-( O.O )            
+( o.o )
  > ^ <
-        )" << "\n";
+)" << "\n";
+
+    } else if (emotional == 2) {
+
+        cout << R"(
+ /\_/\
+( ^.^ )
+ > ^ <
+)" << "\n";
+
+    } else if (emotional == 3) {
+
+        cout << R"(
+ /\_/\
+( O.O )
+ > ^ <
+)" << "\n";
+
+    } else {
+
+        cout << R"(
+ /\_/\
+( -.- )
+ > ^ <
+)" << "\n";
 
     }
 
