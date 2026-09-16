@@ -216,7 +216,6 @@ int main() {
 
     while (running) {
         cout << get_prompt();
-        getline(cin, input);
 
         if (!getline(cin, input)) {
             break;
