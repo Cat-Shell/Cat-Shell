@@ -141,7 +141,8 @@ void cmd_help() {
   help           - показать эту справку
   clear          - очистить экран
   meow           - мяукнуть
-  kitty          - эмоция котика
+  kitty [emotion] - показать котика с эмоцией
+                 emotions: sleep, happy, fright
   pwd            - показать текущий путь
   ls             - список файлов и папок
   exit           - выйти из оболочки
