@@ -35,7 +35,7 @@ void print_welcome() {
 }
 
 
-// ! выводит ASCLL котиков
+// ! выводит ASCII котиков
 void cmd_kitty(const string& argument) {
 
     if (argument == "sleep") {
