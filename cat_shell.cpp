@@ -4,6 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <random> // ! библиотека для рандом числа
+#include <sstream>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -35,23 +36,17 @@ void print_welcome() {
 
 
 // ! выводит ASCLL котиков
-void cmd_kitty() {
+void cmd_kitty(const string& argument) {
 
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> dist(1, 4);
-
-    int emotional = dist(gen);
-
-    if (emotional == 1) {
+    if (argument == "sleep") {
 
         cout << R"(
  /\_/\
-( o.o )
+( -.- )
  > ^ <
 )" << "\n";
 
-    } else if (emotional == 2) {
+    } else if (argument == "happy") {
 
         cout << R"(
  /\_/\
@@ -59,7 +54,7 @@ void cmd_kitty() {
  > ^ <
 )" << "\n";
 
-    } else if (emotional == 3) {
+    } else if (argument == "fright") {
 
         cout << R"(
  /\_/\
@@ -68,10 +63,10 @@ void cmd_kitty() {
 )" << "\n";
 
     } else {
-
+        //! kitty без аргумента
         cout << R"(
  /\_/\
-( -.- )
+( o.o )
  > ^ <
 )" << "\n";
 
@@ -161,25 +156,40 @@ void cmd_help() {
 bool execute_command(const string &input) {
     if (input.empty()) {
         return true; // ! Пропуск пустой строки
-    } if (input == "exit") {
+    } 
+    
+    string command;
+    string argument;
+
+    istringstream iss(input);
+    iss >> command;
+    iss >> argument;
+    
+    if (command == "exit") {
         cout << "Котик будет по тебе скучать(" << endl;
-        return false; // ! Сигнал для выхода из цикла
+        return false;
     }
 
-    if (input == "help") {
+    if (command == "help") {
         cmd_help();
-    } else if (input == "clear") {
+
+    } else if (command == "clear") {
         cmd_clear();
-    } else if (input == "meow") {
+
+    } else if (command == "meow") {
         cmd_meow();
-    } else if (input == "pwd") {
+
+    } else if (command == "pwd") {
         cmd_pwd();
-    } else if (input == "ls") {
+
+    } else if (command == "ls") {
         cmd_ls();
-    } else if (input == "kitty") {
-        cmd_kitty();
+
+    } else if (command == "kitty") {
+        cmd_kitty(argument);
+
     } else {
-        cout << "Cat-Shell: команда не найдена: " << input << "\n";
+        cout << "Cat-Shell: команда не найдена: " << command << "\n";
         cout << "Котик не нашел ее" << endl;
     }
 
