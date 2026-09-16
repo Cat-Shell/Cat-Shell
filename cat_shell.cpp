@@ -218,6 +218,10 @@ int main() {
         cout << get_prompt();
         getline(cin, input);
 
+        if (!getline(cin, input)) {
+            break;
+        }
+
         // ! Передаем команду на выполнение. Если вернулся false - выходим
         running = execute_command(input);
     }
