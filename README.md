@@ -40,10 +40,7 @@ sudo cp cat_shell /usr/local/bin/
 
 ## 🧠 Example
 
-## 🧠 Example
-
 ```bash
-\$ cat-shell
 
   /\_/\
  ( o.o )
