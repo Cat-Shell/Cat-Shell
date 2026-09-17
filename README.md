@@ -31,6 +31,9 @@ sudo cp cat_shell /usr/local/bin/
 | `meow`  | Meow |
 | `pwd`   | Show current working directory |
 | `ls`    | List files and folders in the current directory |
+| `cd`    | Change the current working directory |
+| `mkdir` | Create a new folder |
+| `rmdir` | Delete an empty folder |
 | `exit`  | Exit the shell |
 
 ---
