@@ -57,6 +57,26 @@ void cmd_mkdir(const string& argument) {
 
 }
 
+// ! удаляет пустую папку (создание, но наоборот)
+void cmd_rmdir(const string& argument) {
+
+    // ! проверка на то, пуст ли аргумент
+    if (argument.empty()) { 
+        cout << "Cat-Shell: котик не нашел название папки. Возможно ты ее не указал\n";
+        return; // ! завершаем работу функции
+    }
+
+    try {
+        if (filesystem::remove(argument)) {
+            cout << "Котик удалил папку " << argument << endl;
+        } else {
+            cout << "Cat-Shell: такой папки и так не существовало\n";
+        }
+    } catch (const filesystem::filesystem_error& e) {
+        cout << "Котик обнаружил ошибку (возможно, папка не пуста): " << e.what() << endl; // ! вывод ошибки
+    }
+
+}
 
 // ! указать путь
 void cmd_cd(const string& argument) {
@@ -187,6 +207,7 @@ void cmd_help() {
   ls              - список файлов и папок
   cd [path]       - поменять путь. Важно, писать без кавычек
   mkdir [name]    - создать папку
+  rmdir [name]    - удалить пустую папку
   exit            - выйти из оболочки
   
 Примеры:
@@ -235,6 +256,8 @@ bool execute_command(const string &input) {
         cmd_cd(argument);
     } else if (command == "mkdir") {
         cmd_mkdir(argument);
+    } else if (command == "rmdir") {
+        cmd_rmdir(argument)
     } else {
         cout << "Cat-Shell: команда не найдена: " << command << "\n";
         cout << "Котик не нашел ее" << endl;
