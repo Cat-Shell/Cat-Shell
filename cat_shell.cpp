@@ -34,6 +34,24 @@ void print_welcome() {
     cout << "Котик ждет твоей команды.\n\n";
 }
 
+// ! создает папку
+void cmd_mkdir(const string& argument) {
+
+    // ! проверка на то, пуст ли аргумент
+    if (argument.empty()) { 
+        cout << "Cat-Shell: котик не нашел название папки. Возможно ты ее не укзазал\n";
+        return; // ! завершаем работу функции
+    }
+
+    try {
+        filesystem::create_directory(argument); // ! создание директории, и ей присваивают имя - которое полученно от аргумента
+    } catch (const filesystem::filesystem_error& e) {
+        cout << "Котик обнаружил ошибку " << e.what() << endl; // ! вывод ошибки
+    }
+
+}
+
+
 // ! указать путь
 void cmd_cd(const string& argument) {
 
@@ -161,12 +179,13 @@ void cmd_help() {
   [emotion]       - sleep, happy, fright
   pwd             - показать текущий путь
   ls              - список файлов и папок
-  exit            - выйти из оболочки
   cd [path]       - поменять путь. Важно, писать без кавычек
+  mkdir [name]    - создать папку
+  exit            - выйти из оболочки
   
 Примеры:
   ls
-  meow
+  kitty sleep
 )";
 }
 
@@ -208,6 +227,8 @@ bool execute_command(const string &input) {
 
     } else if (command == "cd") {
         cmd_cd(argument);
+    } else if (command == "mkdir") {
+        cmd_mkdir(argument);
     } else {
         cout << "Cat-Shell: команда не найдена: " << command << "\n";
         cout << "Котик не нашел ее" << endl;
