@@ -40,28 +40,42 @@ sudo cp cat_shell /usr/local/bin/
 
 ## 🧠 Example
 
+## 🧠 Example
+
 ```bash
-$ cat-shell
+\$ cat-shell
 
   /\_/\
  ( o.o )
   > ^ <   Cat-Shell v0.2.3
 
 🐱 > help
-help  - this help message
-clear - clear the screen
-meow  - meow
-pwd   - current working directory
-ls    - list files and folders
-exit  - exit
 
-🐱 > meow
-Meow!
+Доступные команды:
+  help            - показать эту справку
+  clear           - очистить экран
+  meow            - мяукнуть
+  kitty [emotion] - показать котика с эмоцией
+                  emotions: sleep, happy, fright
+  pwd             - показать текущий путь
+  ls              - список файлов и папок
+  cd [path]       - поменять путь. Важно, писать без кавычек
+  mkdir [name]    - создать папку
+  rmdir [name]    - удалить пустую папку
+  exit            - выйти из оболочки
+  
+Примеры:
+  ls
+  kitty sleep
 
-🐱 > pwd
-/home/user
+🐱 > mkdir test_folder
+Котик создал папку test_folder
+
+🐱 > rmdir test_folder
+Котик успешно удалил папку test_folder
 
 🐱 > exit
+Котик будет по тебе скучать(
 ```
 
 ---
