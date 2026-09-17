@@ -3,6 +3,8 @@
 #include <string>
 #include <thread>
 #include <chrono>
+#include <cstdlib>
+#include <clocale>
 #include <random> // ! библиотека для рандом числа
 #include <sstream>  // ! библиотека для аргумента
 
@@ -39,7 +41,7 @@ void cmd_mkdir(const string& argument) {
 
     // ! проверка на то, пуст ли аргумент
     if (argument.empty()) { 
-        cout << "Cat-Shell: котик не нашел название папки. Возможно ты ее не укзазал\n";
+        cout << "Cat-Shell: котик не нашел название папки. Возможно ты ее не указал\n";
         return; // ! завершаем работу функции
     }
 
@@ -62,7 +64,7 @@ void cmd_cd(const string& argument) {
     }
 
     try {
-        filesystem::current_path(argument);     // ! изменяет текушую директорию
+        filesystem::current_path(argument);     // ! изменяет текущую директорию
     } catch (const filesystem::filesystem_error& e) {
         cout << "Котик обнаружил ошибку: " << e.what() << endl; // ! если чот произойдет, то выведет ошибку
     }
@@ -168,7 +170,7 @@ void cmd_meow() {
 // ! Печать справки по командам
 void cmd_help() {
 
-    wait_dots("Котик торопиться достать листок с подсказками");
+    wait_dots("Котик торопится достать листок с подсказками");
 
     cout << R"(
 Доступные команды:
@@ -176,7 +178,7 @@ void cmd_help() {
   clear           - очистить экран
   meow            - мяукнуть
   kitty [emotion] - показать котика с эмоцией
-  [emotion]       - sleep, happy, fright
+                  emotions: sleep, happy, fright
   pwd             - показать текущий путь
   ls              - список файлов и папок
   cd [path]       - поменять путь. Важно, писать без кавычек
