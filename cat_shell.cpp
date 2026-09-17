@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <random> // ! библиотека для рандом числа
-#include <sstream>
+#include <sstream>  // ! библиотека для аргумента
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -34,6 +34,10 @@ void print_welcome() {
     cout << "Котик ждет твоей команды.\n\n";
 }
 
+// ! указать путь
+void cmd_cd(const string& agrument) {
+    
+}
 
 // ! выводит ASCII котиков
 void cmd_kitty(const string& argument) {
@@ -63,7 +67,7 @@ void cmd_kitty(const string& argument) {
 )" << "\n";
 
     } else {
-        //! kitty без аргумента
+        // ! kitty без аргумента
         cout << R"(
  /\_/\
 ( o.o )
