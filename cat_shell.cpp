@@ -35,8 +35,19 @@ void print_welcome() {
 }
 
 // ! указать путь
-void cmd_cd(const string& agrument) {
-    
+void cmd_cd(const string& argument) {
+
+    if (argument.empty()) {
+        cout << "Cat-Shell: котик не нашел путь, ибо ты его не указал.\n";
+        return;
+    }
+
+    try {
+        filesystem::current_path(argument);
+    } catch (const filesystem::filesystem_error& e) {
+        cout << "Котик обнаружил ошибку: " << e.what() << endl;
+    }
+
 }
 
 // ! выводит ASCII котиков
