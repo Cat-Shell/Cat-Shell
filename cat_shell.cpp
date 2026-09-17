@@ -205,6 +205,8 @@ bool execute_command(const string &input) {
     } else if (command == "kitty") {
         cmd_kitty(argument);
 
+    } else if (command == "cd") {
+        cmd_cd(argument);
     } else {
         cout << "Cat-Shell: команда не найдена: " << command << "\n";
         cout << "Котик не нашел ее" << endl;
