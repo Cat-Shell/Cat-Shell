@@ -37,15 +37,16 @@ void print_welcome() {
 // ! указать путь
 void cmd_cd(const string& argument) {
 
+    // ! проверка на то, пустой ли аргумент
     if (argument.empty()) {
         cout << "Cat-Shell: котик не нашел путь, ибо ты его не указал.\n";
-        return;
+        return; // ! означает, что функция завершила работу
     }
 
     try {
-        filesystem::current_path(argument);
+        filesystem::current_path(argument);     // ! изменяет текушую директорию
     } catch (const filesystem::filesystem_error& e) {
-        cout << "Котик обнаружил ошибку: " << e.what() << endl;
+        cout << "Котик обнаружил ошибку: " << e.what() << endl; // ! если чот произойдет, то выведет ошибку
     }
 
 }
