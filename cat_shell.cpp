@@ -46,7 +46,11 @@ void cmd_mkdir(const string& argument) {
     }
 
     try {
-        filesystem::create_directory(argument); // ! создание директории, и ей присваивают имя - которое полученно от аргумента
+        if (filesystem::create_directory(argument)) {
+            cout << "Котик создал папку " << argument << endl;
+        } else {
+            cout << "Cat-Shell: твоя папка и так уже существует\n";
+        }
     } catch (const filesystem::filesystem_error& e) {
         cout << "Котик обнаружил ошибку " << e.what() << endl; // ! вывод ошибки
     }
