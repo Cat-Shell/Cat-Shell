@@ -5,10 +5,12 @@
 #include <chrono>
 #include <cstdlib>
 #include <clocale>
+#include <limits> // ! библиотека для очистки оставшегося ввода
 #include <random> // ! библиотека для рандом числа
 #include <sstream>  // ! библиотека для аргумента
 
 #ifdef _WIN32
+#define NOMINMAX
 #include <Windows.h>
 #endif
 
@@ -60,22 +62,37 @@ void cmd_mkdir(const string& argument) {
 // ! удаляет пустую папку (создание, но наоборот)
 void cmd_rmdir(const string& argument) {
 
-    // ! проверка на то, пуст ли аргумент
-    if (argument.empty()) { 
+    if (argument.empty()) {
         cout << "Cat-Shell: котик не нашел название папки. Возможно ты ее не указал\n";
-        return; // ! завершаем работу функции
+        return;
     }
+
+    char answer;
+
+    cout << "Котик собирается удалить папку \"" << argument
+         << "\". Ты уверен? [y/N]: ";
+
+    cin >> answer;
+
+    if (answer != 'y' && answer != 'Y') {
+        cout << "Котик передумал удалять папку" << endl;
+        return;
+    }
+
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     try {
         if (filesystem::remove(argument)) {
             cout << "Котик удалил папку " << argument << endl;
-        } else {
+        }
+        else {
             cout << "Cat-Shell: такой папки и так не существовало\n";
         }
-    } catch (const filesystem::filesystem_error& e) {
-        cout << "Котик обнаружил ошибку (возможно, папка не пуста): " << e.what() << endl; // ! вывод ошибки
     }
-
+    catch (const filesystem::filesystem_error& e) {
+        cout << "Котик обнаружил ошибку (возможно, папка не пуста): "
+             << e.what() << endl;
+    }
 }
 
 // ! указать путь
