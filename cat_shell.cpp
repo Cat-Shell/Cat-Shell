@@ -1,3 +1,5 @@
+#define NOMINMAX // ! Обязательно ДО #include <Windows.h>
+
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -10,8 +12,23 @@
 #include <sstream>  // ! библиотека для аргумента
 
 #ifdef _WIN32
-#define NOMINMAX
+
 #include <Windows.h>
+
+void init_win_console() {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == INVALID_HANDLE_VALUE) return;
+
+    DWORD dwMode = 0;
+    if (!GetConsoleMode(hOut, &dwMode)) return;
+
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, dwMode);
+}
+
 #endif
 
 using namespace std;
@@ -79,7 +96,7 @@ void cmd_rmdir(const string& argument) {
         return;
     }
 
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.ignore((numeric_limits<streamsize>::max)(), '\n');
 
     try {
         if (filesystem::remove(argument)) {
@@ -285,14 +302,18 @@ bool execute_command(const string &input) {
 
 // ! Формирование строки приглашения (prompt)
 string get_prompt() {
-    return "🐱 " + filesystem::current_path().string() + "> ";
+    string path = filesystem::current_path().string();
+
+    return "\033[38;5;213m🐱 Cat-Shell\033[0m "
+           "\033[38;5;245m" + path + "\033[0m "
+           "\033[38;5;213m❯\033[0m ";
 }
 
 
 // ! Основная функция
 int main() {
 #ifdef _WIN32
-    SetConsoleOutputCP(CP_UTF8);
+    init_win_console();
     setlocale(LC_ALL, ".UTF8");
 #endif
 
@@ -302,7 +323,7 @@ int main() {
     bool running = true;
 
     while (running) {
-        cout << get_prompt();
+        cout << get_prompt() << flush;
 
         if (!getline(cin, input)) {
             break;
