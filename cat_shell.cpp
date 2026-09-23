@@ -257,7 +257,12 @@ bool execute_command(const string &input) {
 
     istringstream iss(input);
     iss >> command;
-    iss >> argument;
+
+    // ! Читаем остаток строки целиком, чтобы аргумент мог содержать пробелы
+    getline(iss, argument);
+    if (!argument.empty() && argument[0] == ' ') {
+        argument.erase(0, 1); // ! убираем ведущий пробел
+    }
     
     if (command == "exit") {
         cout << "Котик будет по тебе скучать(" << endl;
