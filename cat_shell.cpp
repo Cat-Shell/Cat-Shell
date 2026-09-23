@@ -76,7 +76,7 @@ void cmd_mkdir(const string& argument) {
 
 }
 
-// ! удаляет пустую папку (создание, но наоборот)
+// ! удаляет пустую папку
 void cmd_rmdir(const string& argument) {
 
     if (argument.empty()) {
@@ -84,29 +84,25 @@ void cmd_rmdir(const string& argument) {
         return;
     }
 
-    char answer;
-
     cout << "Котик собирается удалить папку \"" << argument
          << "\". Ты уверен? [y/N]: ";
+    cout.flush();
 
-    cin >> answer;
+    string answer;
+    getline(cin, answer);   // ! читаем всю строку целиком
 
-    if (answer != 'y' && answer != 'Y') {
+    if (answer != "y" && answer != "Y") {
         cout << "Котик передумал удалять папку" << endl;
         return;
     }
 
-    cin.ignore((numeric_limits<streamsize>::max)(), '\n');
-
     try {
         if (filesystem::remove(argument)) {
             cout << "Котик удалил папку " << argument << endl;
-        }
-        else {
+        } else {
             cout << "Cat-Shell: такой папки и так не существовало\n";
         }
-    }
-    catch (const filesystem::filesystem_error& e) {
+    } catch (const filesystem::filesystem_error& e) {
         cout << "Котик обнаружил ошибку (возможно, папка не пуста): "
              << e.what() << endl;
     }
