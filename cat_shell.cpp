@@ -244,6 +244,7 @@ void cmd_help() {
     cout << R"(
 Доступные команды:
   help            - показать эту справку
+  history         - показать историю комманд
   clear           - очистить экран
   meow            - мяукнуть
   kitty [emotion] - показать котика с эмоцией
@@ -337,6 +338,7 @@ int main() {
 
     string input;
     bool running = true;
+    vector<string> history;
 
     while (running) {
         cout << get_prompt() << flush;
@@ -345,8 +347,10 @@ int main() {
             break;
         }
 
+        history.push_back(input);
+
         // ! Передаем команду на выполнение. Если вернулся false - выходим
-        running = execute_command(input);
+        running = execute_command(input, history);
     }
 
     return 0;
