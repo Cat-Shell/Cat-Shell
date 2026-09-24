@@ -10,6 +10,7 @@
 #include <limits> // ! библиотека для очистки оставшегося ввода
 #include <random> // ! библиотека для рандом числа
 #include <sstream>  // ! библиотека для аргумента
+#include <vector> // ! библиотека для команды history
 
 #ifdef _WIN32
 
@@ -197,6 +198,20 @@ void cmd_clear() {
     print_welcome();
 }
 
+// ! история введенных команд
+void cmd_history(const vector<string>& history) {
+    
+    if (history.empty()) {
+        cout << "Котик пока ничего не запомнил" << endl;
+        return;
+    }
+
+    for (size_t i = 0; i < history.size(); i++) {
+        cout << 1 + 1 << " " << history[i] << endl;
+    }
+
+}
+
 // ! Мяуканье
 void cmd_meow() {
 
@@ -247,7 +262,7 @@ void cmd_help() {
 }
 
 // ! Обработка и выполнение команд
-bool execute_command(const string &input) {
+bool execute_command(const string &input, const vector<string>& history) {
     if (input.empty()) {
         return true; // ! Пропуск пустой строки
     } 
