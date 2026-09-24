@@ -267,6 +267,11 @@ void cmd_meow() {
 
 }
 
+// ! Эхо: выводит переданный текст
+void cmd_echo(const string& argument) {
+    cout << argument << "\n";
+}
+
 // ! Печать справки по командам
 void cmd_help() {
 
@@ -278,6 +283,7 @@ void cmd_help() {
   history         - показать историю комманд
   clear           - очистить экран
   meow            - мяукнуть
+  echo [text]     - вывести текст на экран
   kitty [emotion] - показать котика с эмоцией
                   emotions: sleep, happy, fright
   pwd             - показать текущий путь
@@ -292,6 +298,7 @@ void cmd_help() {
   ls
   kitty sleep
   rm notes.txt
+  echo привет, котик
 )";
 }
 
@@ -329,6 +336,9 @@ bool execute_command(const string &input, const vector<string>& history) {
 
     } else if (command == "meow") {
         cmd_meow();
+
+    } else if (command == "echo") {
+        cmd_echo(argument);
 
     } else if (command == "pwd") {
         cmd_pwd();
