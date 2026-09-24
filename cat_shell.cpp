@@ -1,6 +1,7 @@
 #define NOMINMAX // ! Обязательно ДО #include <Windows.h>
 
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -272,6 +273,28 @@ void cmd_echo(const string& argument) {
     cout << argument << "\n";
 }
 
+// ! Кот: выводит содержимое текстового файла
+void cmd_cat(const string& argument) {
+
+    if (argument.empty()) {
+        cout << "Cat-Shell: котик не нашел название файла. Возможно ты его не указал\n";
+        return;
+    }
+
+    ifstream file(argument);
+    if (!file.is_open()) {
+        cout << "Cat-Shell: котик не смог открыть файл \"" << argument << "\"\n";
+        return;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        cout << line << "\n";
+    }
+
+    file.close();
+}
+
 // ! Печать справки по командам
 void cmd_help() {
 
@@ -284,6 +307,7 @@ void cmd_help() {
   clear           - очистить экран
   meow            - мяукнуть
   echo [text]     - вывести текст на экран
+  cat [file]      - вывести содержимое файла
   kitty [emotion] - показать котика с эмоцией
                   emotions: sleep, happy, fright
   pwd             - показать текущий путь
@@ -299,6 +323,7 @@ void cmd_help() {
   kitty sleep
   rm notes.txt
   echo привет, котик
+  cat readme.txt
 )";
 }
 
@@ -339,6 +364,9 @@ bool execute_command(const string &input, const vector<string>& history) {
 
     } else if (command == "echo") {
         cmd_echo(argument);
+
+    } else if (command == "cat") {
+        cmd_cat(argument);
 
     } else if (command == "pwd") {
         cmd_pwd();
