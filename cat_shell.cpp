@@ -288,6 +288,9 @@ bool execute_command(const string &input, const vector<string>& history) {
     if (command == "help") {
         cmd_help();
 
+    } else if (command == "history") {
+        cmd_history(history);
+
     } else if (command == "clear") {
         cmd_clear();
 
