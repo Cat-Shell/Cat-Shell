@@ -109,6 +109,37 @@ void cmd_rmdir(const string& argument) {
     }
 }
 
+// ! удаляет файл
+void cmd_rm(const string& argument) {
+
+    if (argument.empty()) {
+        cout << "Cat-Shell: котик не нашел название файла. Возможно ты его не указал\n";
+        return;
+    }
+
+    cout << "Котик собирается удалить файл \"" << argument
+         << "\". Ты уверен? [y/N]: ";
+    cout.flush();
+
+    string answer;
+    getline(cin, answer);
+
+    if (answer != "y" && answer != "Y") {
+        cout << "Котик передумал удалять файл" << endl;
+        return;
+    }
+
+    try {
+        if (filesystem::remove(argument)) {
+            cout << "Котик удалил файл " << argument << endl;
+        } else {
+            cout << "Cat-Shell: такого файла и так не существовало\n";
+        }
+    } catch (const filesystem::filesystem_error& e) {
+        cout << "Котик обнаружил ошибку: " << e.what() << endl;
+    }
+}
+
 // ! указать путь
 void cmd_cd(const string& argument) {
 
@@ -254,11 +285,13 @@ void cmd_help() {
   cd [path]       - поменять путь. Важно, писать без кавычек
   mkdir [name]    - создать папку
   rmdir [name]    - удалить пустую папку
+  rm [file]       - удалить файл
   exit            - выйти из оболочки
   
 Примеры:
   ls
   kitty sleep
+  rm notes.txt
 )";
 }
 
@@ -312,6 +345,8 @@ bool execute_command(const string &input, const vector<string>& history) {
         cmd_mkdir(argument);
     } else if (command == "rmdir") {
         cmd_rmdir(argument);
+    } else if (command == "rm") {
+        cmd_rm(argument);
     } else {
         cout << "Cat-Shell: команда не найдена: " << command << "\n";
         cout << "Котик не нашел ее" << endl;
