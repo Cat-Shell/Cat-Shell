@@ -6,7 +6,7 @@ It's simple, playful, and perfect for learning or just for fun.
 ```text
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.3
+  > ^ <   Cat-Shell v0.2.4
 ```
 
 ---
