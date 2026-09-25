@@ -98,12 +98,16 @@ void cmd_rmdir(const string& argument) {
         return;
     }
 
+    // ! проверка существования папки ПОСЛЕ согласия пользователя
+    if (!filesystem::exists(argument)) {
+        cout << "Cat-Shell: пока ты думал, котик заметил, что такой папки и так не существует\n";
+        return;
+    }
+
     try {
         if (filesystem::remove(argument)) {
             cout << "Котик удалил папку " << argument << endl;
-        } else {
-            cout << "Cat-Shell: такой папки и так не существовало\n";
-        }
+        } 
     } catch (const filesystem::filesystem_error& e) {
         cout << "Котик обнаружил ошибку (возможно, папка не пуста): "
              << e.what() << endl;
@@ -130,11 +134,15 @@ void cmd_rm(const string& argument) {
         return;
     }
 
+    // ! проверка существования файла ПОСЛЕ согласия пользователя
+    if (!filesystem::exists(argument)) {
+        cout << "Cat-Shell: пока ты думал, котик заметил, что такого файла и так не существует\n";
+        return;
+    }
+
     try {
         if (filesystem::remove(argument)) {
             cout << "Котик удалил файл " << argument << endl;
-        } else {
-            cout << "Cat-Shell: такого файла и так не существовало\n";
         }
     } catch (const filesystem::filesystem_error& e) {
         cout << "Котик обнаружил ошибку: " << e.what() << endl;
