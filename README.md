@@ -26,15 +26,20 @@ sudo cp cat_shell /usr/local/bin/
 
 | Command | Description |
 |---------|-------------|
-| `help`  | Show list of commands |
-| `clear` | Clear the screen |
-| `meow`  | Meow |
+| `help`  | Show list of commands and help notes |
+| `history` | Show the history of entered commands |
+| `clear` | Clear the screen with a smooth wipe animation |
+| `meow`  | Make the kitty meow or purr randomly |
+| `echo [text]` | Print text to the screen |
+| `cat [file]` | Display the contents of a text file |
+| `kitty [emotion]` | Show ASCII kitty with an emotion (`sleep`, `happy`, `fright`) |
 | `pwd`   | Show current working directory |
 | `ls`    | List files and folders in the current directory |
-| `cd`    | Change the current working directory |
-| `mkdir` | Create a new folder |
-| `rmdir` | Delete an empty folder |
-| `exit`  | Exit the shell |
+| `cd [path]` | Change the current working directory (write without quotes) |
+| `mkdir [name]` | Create a new folder |
+| `rmdir [name]` | Delete an empty folder (asks for confirmation) |
+| `rm [file]` | Delete a file (asks for confirmation) |
+| `exit`  | Exit the shell and say goodbye to the kitty |
 
 ---
 
@@ -44,14 +49,17 @@ sudo cp cat_shell /usr/local/bin/
 
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.3
+  > ^ <   Cat-Shell v0.2.4
 
 🐱 > help
 
 Доступные команды:
   help            - показать эту справку
+  history         - показать историю команд
   clear           - очистить экран
   meow            - мяукнуть
+  echo [text]     - вывести текст на экран
+  cat [file]      - вывести содержимое файла
   kitty [emotion] - показать котика с эмоцией
                   emotions: sleep, happy, fright
   pwd             - показать текущий путь
@@ -59,17 +67,20 @@ sudo cp cat_shell /usr/local/bin/
   cd [path]       - поменять путь. Важно, писать без кавычек
   mkdir [name]    - создать папку
   rmdir [name]    - удалить пустую папку
+  rm [file]       - удалить файл
   exit            - выйти из оболочки
   
 Примеры:
   ls
   kitty sleep
+  rm notes.txt
+  echo привет, котик
+  cat readme.txt
 
-🐱 > mkdir test_folder
-Котик создал папку test_folder
-
-🐱 > rmdir test_folder
-Котик успешно удалил папку test_folder
+🐱 > history
+1. ls
+2. kitty sleep
+3. echo привет, котик
 
 🐱 > exit
 Котик будет по тебе скучать(
