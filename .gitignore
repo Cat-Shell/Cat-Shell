@@ -5,6 +5,8 @@ a.out
 *.o
 *.obj
 *.exe
+main
+main.exe
 
 # Build folders
 build/
