@@ -239,7 +239,7 @@ void cmd_history(const vector<string>& history) {
     }
 
     for (size_t i = 0; i < history.size(); i++) {
-        cout << (i + 1) << " " << history[i] << endl;
+        cout << (i + 1) << ". " << history[i] << endl;
     }
 
 }
