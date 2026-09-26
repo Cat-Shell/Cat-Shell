@@ -238,6 +238,26 @@ void cmd_cat(const string& argument) {
     file.close();
 }
 
+// ! Выводит текущую дату и время
+void cmd_time() {
+    wait_dots("Котик смотрит на настенные часы");
+
+    // Получаем текущее системное время
+    auto now = chrono::system_clock::now();
+    auto in_time_t = chrono::system_clock::to_time_t(now);
+
+    // Безопасно переводим в локальное время (работает и на Windows, и на Linux)
+    tm buf;
+#ifdef _WIN32
+    localtime_s(&buf, &in_time_t);
+#else
+    localtime_r(&in_time_t, &buf);
+#endif
+
+    // Красиво выводим время
+    cout << "Сейчас: " << put_time(&buf, "%Y-%m-%d %H:%M:%S") << "\n";
+}
+
 void cmd_help() {
     wait_dots("Котик торопится достать листок с подсказками");
     cout << R"(
@@ -256,6 +276,7 @@ void cmd_help() {
   mkdir [name]    - создать папку
   rmdir [name]    - удалить пустую папку
   rm [file]       - удалить файл
+  time            - показать текущую дату и время
   exit            - выйти из оболочки
   
 Примеры:
@@ -299,6 +320,7 @@ bool execute_command(const string &input, const vector<string>& history) {
     else if (command == "mkdir") cmd_mkdir(argument);
     else if (command == "rmdir") cmd_rmdir(argument);
     else if (command == "rm") cmd_rm(argument);
+    else if (command == "time") cmd_time(argument);
     else {
         cout << "Cat-Shell: команда не найдена: " << command << "\n";
         cout << "Котик не нашел ее" << endl;
