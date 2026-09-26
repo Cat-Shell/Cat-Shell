@@ -42,7 +42,7 @@ void print_welcome() {
     cout << R"(
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.4
+  > ^ <   Cat-Shell v0.2.5
 
 )";
     cout << "Котик ждет твоей команды.\n\n";
