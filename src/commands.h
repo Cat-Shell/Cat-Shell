@@ -29,6 +29,7 @@ void cmd_history(const std::vector<std::string>& history);
 void cmd_meow();
 void cmd_echo(const std::string& argument);
 void cmd_cat(const std::string& argument);
+void cmd_time();
 void cmd_help();
 
 // Обработчик команд
