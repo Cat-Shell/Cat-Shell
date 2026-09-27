@@ -320,7 +320,7 @@ bool execute_command(const string &input, const vector<string>& history) {
     else if (command == "mkdir") cmd_mkdir(argument);
     else if (command == "rmdir") cmd_rmdir(argument);
     else if (command == "rm") cmd_rm(argument);
-    else if (command == "time") cmd_time(argument);
+    else if (command == "time") cmd_time();
     else {
         cout << "Cat-Shell: команда не найдена: " << command << "\n";
         cout << "Котик не нашел ее" << endl;
