@@ -50,7 +50,7 @@ sudo cp cat_shell /usr/local/bin/
 
   /\_/\
  ( o.o )
-  > ^ <   Cat-Shell v0.2.4
+  > ^ <   Cat-Shell v0.2.5
 
 🐱 > help
 
