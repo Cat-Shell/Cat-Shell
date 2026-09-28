@@ -39,6 +39,7 @@ sudo cp cat_shell /usr/local/bin/
 | `mkdir [name]` | Create a new folder |
 | `rmdir [name]` | Delete an empty folder (asks for confirmation) |
 | `rm [file]` | Delete a file (asks for confirmation) |
+| `time`  | Show current date and time |
 | `exit`  | Exit the shell and say goodbye to the kitty |
 
 ---
@@ -68,8 +69,9 @@ sudo cp cat_shell /usr/local/bin/
   mkdir [name]    - создать папку
   rmdir [name]    - удалить пустую папку
   rm [file]       - удалить файл
+  time            - показать текущую дату и время
   exit            - выйти из оболочки
-  
+
 Примеры:
   ls
   kitty sleep
