@@ -25,7 +25,9 @@ int main() {
             break;
         }
 
-        history.push_back(input);
+        if (!input.empty() && (history.empty() || history.back() != input)) {
+            history.push_back(input);
+        }
         running = execute_command(input, history);
     }
 
