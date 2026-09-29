@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <cstddef>
 
 namespace Color {
     const std::string pink = "\033[38;5;213m";
@@ -28,9 +29,16 @@ void print_welcome();
 std::string get_prompt();
 std::string read_input(const std::string& prompt);
 
+// свой ввод
 void print_highlighted_command(
     const std::string& command,
     const std::string& argument
+);
+ 
+void redraw_input(
+    const std::string& prompt,
+    const std::string& input,
+    std::size_t cursor
 );
 
 // Команды оболочки

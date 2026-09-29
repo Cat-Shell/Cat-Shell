@@ -21,7 +21,8 @@ int main() {
     while (running) {
         
         string prompt = get_prompt();
-        cout << get_prompt() << flush;
+
+        cout << prompt << flush;
 
         input = read_input(prompt);
 

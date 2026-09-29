@@ -311,6 +311,22 @@ void print_highlighted_command(
 
 }
 
+void redraw_input(
+    const std::string& prompt,
+    const std::string& input,
+    std::size_t cursor
+) {
+    cout << "\r\033[2K"
+         << prompt
+         << input;
+
+    if (cursor < input.size()) {
+        cout << "\033[" << (input.size() - cursor) << "D";
+    }
+
+    cout.flush();
+}
+
 std::string read_input(const std::string& prompt) {
     std::string input;
     std::size_t cursor = 0;
@@ -333,14 +349,7 @@ std::string read_input(const std::string& prompt) {
                 input.erase(cursor - 1, 1);
                 cursor--;
 
-                cout << "\r\033[2K"
-                     << prompt
-                     << input;
-
-                if (cursor < input.size()) {
-                    cout << "\033[" << (input.size() - cursor) << "D";
-                }
-                cout.flush();
+                redraw_input(prompt, input, cursor);
             }
             continue;
         }
@@ -386,14 +395,7 @@ std::string read_input(const std::string& prompt) {
                 if (cursor < input.size()) {
                     input.erase(cursor, 1);
 
-                    cout << "\r\033[2K"
-                         << prompt
-                         << input;
-
-                    if (cursor < input.size()) {
-                        cout << "\033[" << (input.size() - cursor) << "D";
-                    }
-                    cout.flush();
+                    redraw_input(prompt, input, cursor);
                 }
             }
 
@@ -404,15 +406,7 @@ std::string read_input(const std::string& prompt) {
         input.insert(cursor, 1, ch);
         cursor++;
 
-        cout << "\r\033[2K"
-             << prompt
-             << input;
-
-        if (cursor < input.size()) {
-            cout << "\033[" << (input.size() - cursor) << "D";
-        }
-
-        cout.flush();
+        redraw_input(prompt, input, cursor);
     }
 
 #else
