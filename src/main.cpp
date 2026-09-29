@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
 #ifdef _WIN32
     init_win_console();
     setlocale(LC_ALL, ".UTF8");
