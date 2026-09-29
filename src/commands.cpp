@@ -288,6 +288,22 @@ void cmd_help() {
 )";
 }
 
+void print_highlighted_command(
+    const std::string& command,
+    const std::string& argument
+) {
+
+    cout << Color::command << command << Color::reset;
+    
+    if (!argument.empty()) {
+        cout << " "
+            << Color::argument << argument << Color::reset;
+    }
+
+    cout << "\n";
+
+}
+
 bool execute_command(const string &input, const vector<string>& history) {
     if (input.empty()) return true;
     
