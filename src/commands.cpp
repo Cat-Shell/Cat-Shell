@@ -358,6 +358,11 @@ std::string read_input(const std::string& prompt) {
     while (true) {
         ch = _getch();
 
+        if (ch == EOF) {
+            cout << '\n';
+            break;
+        }
+
         // Enter
         if (ch == '\r') {
             cout << '\n';
@@ -444,6 +449,11 @@ std::string read_input(const std::string& prompt) {
     while (true) {
         ch = getchar();
 
+        if (ch == EOF) {
+            cout << '\n';
+            break;
+        }
+
         // Enter
         if (ch == '\n') {
             cout << '\n';
@@ -455,7 +465,6 @@ std::string read_input(const std::string& prompt) {
             if (cursor > 0) {
                 input.erase(cursor - 1, 1);
                 cursor--;
-                // ИСПРАВЛЕНО: используем нашу функцию подсветки вместо ручного cout
                 redraw_input(prompt, input, cursor);
             }
             continue;
@@ -464,9 +473,11 @@ std::string read_input(const std::string& prompt) {
         // Escape sequence
         if (ch == '\033') {
             char second = getchar();
+            if (second == EOF) break;
 
             if (second == '[') {
                 char third = getchar();
+                if (third == EOF) break;
 
                 // ←
                 if (third == 'D') {
@@ -505,7 +516,6 @@ std::string read_input(const std::string& prompt) {
                     getchar(); // поглощаем '~'
                     if (cursor < input.size()) {
                         input.erase(cursor, 1);
-                        // ИСПРАВЛЕНО: используем нашу функцию подсветки
                         redraw_input(prompt, input, cursor);
                     }
                 }
@@ -516,8 +526,7 @@ std::string read_input(const std::string& prompt) {
         // Обычный символ
         input.insert(cursor, 1, ch);
         cursor++;
-        
-        // ИСПРАВЛЕНО: используем нашу функцию подсветки вместо ручного cout
+
         redraw_input(prompt, input, cursor);
     }
 

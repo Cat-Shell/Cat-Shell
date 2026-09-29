@@ -12,6 +12,14 @@ int main() {
     setlocale(LC_ALL, ".UTF8");
 #endif
 
+    if (argc > 1) {
+        std::string arg = argv[1];
+        if (arg == "--help" || arg == "-h") {
+            cmd_help();
+            return 0;
+        }
+    }
+
     print_welcome();
 
     string input;
