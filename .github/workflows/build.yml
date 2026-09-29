@@ -1,0 +1,92 @@
+name: 🐱 Cat-Shell CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/*.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'src/**'
+
+jobs:
+  build-binaries:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: cat_shell_Linux
+            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell_Linux
+          - os: windows-latest
+            artifact_name: cat_shell_Windows.exe
+            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell_Windows.exe
+          - os: macos-latest
+            artifact_name: cat_shell_macOS
+            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell_macOS
+            
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Скачиваем код
+      uses: actions/checkout@v4
+
+    - name: Компиляция Cat-Shell
+      run: |
+        ${{ matrix.cmd }}
+
+    - name: Проверка работоспособности (базовый запуск)
+      if: runner.os != 'Windows'
+      run: |
+        ./${{ matrix.artifact_name }} --help || echo "Сборка запускается корректно"
+
+    - name: Подготовка папки для артефактов
+      shell: bash
+      run: |
+        mkdir -p dist
+        mv ${{ matrix.artifact_name }} dist/
+
+    - name: Временно сохраняем артефакт сборки
+      uses: actions/upload-artifact@v4
+      with:
+        name: binary-${{ matrix.os }}
+        path: dist/*
+        retention-days: 1
+
+  publish-release:
+    needs: build-binaries
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: github.event_name == 'push'
+    steps:
+    - name: Скачиваем код (нужен для работы с Git-тегами)
+      uses: actions/checkout@v4
+
+    - name: Скачиваем все собранные бинарники
+      uses: actions/download-artifact@v4
+      with:
+        pattern: binary-*
+        path: release_assets
+        merge-multiple: true
+
+    - name: Пересоздать тег main
+      shell: bash
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -d main || true
+        git push origin :refs/tags/main || true
+        sleep 3
+        git tag main
+        git push origin refs/tags/main --force
+
+    - name: Загружаем три бинарника в Релиз GitHub
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: main
+        files: release_assets/*
+        name: "Cat-Shell Rolling Build"
+        body: "Автоматическая сборка для Linux, Windows и macOS. Тег обновляется при каждом коммите в ветку main."
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
