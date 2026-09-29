@@ -11,11 +11,11 @@
 namespace Color {
     const std::string pink = "\033[38;5;213m";
     const std::string gray = "\033[38;5;245m";
-    const std::string reset = "\033[0m";
 
-    const std::string command = "\033[38;5;117m";
-    const std::string argument = "\033[38;5;222m";
-    const std::string error = "\033[38;5;203m";
+    const std::string command = "\033[38;5;81m";
+    const std::string argument = "\033[38;5;220m";
+
+    const std::string reset = "\033[0m";
 }
 
 #ifdef _WIN32

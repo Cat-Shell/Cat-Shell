@@ -321,16 +321,18 @@ void redraw_input(
     std::size_t space_pos = input.find(' ');
 
     if (space_pos == std::string::npos) {
-        // Введена только команда
-        cout << Color::command << input << Color::reset;
+
+        cout << Color::command
+             << input
+             << Color::reset;
+
     } else {
-        // Команда
+
         cout << Color::command
              << input.substr(0, space_pos)
              << Color::reset;
 
-        // Пробел и аргумент
-        cout << input.substr(space_pos, input.size() - space_pos);
+        cout << input.substr(space_pos, 1);
 
         if (space_pos + 1 < input.size()) {
             cout << Color::argument
@@ -339,7 +341,6 @@ void redraw_input(
         }
     }
 
-    // Возвращаем курсор туда, где пользователь сейчас находится
     if (cursor < input.size()) {
         cout << "\033[" << (input.size() - cursor) << "D";
     }
@@ -454,15 +455,8 @@ std::string read_input(const std::string& prompt) {
             if (cursor > 0) {
                 input.erase(cursor - 1, 1);
                 cursor--;
-
-                cout << "\r\033[2K"
-                     << prompt
-                     << input;
-
-                if (cursor < input.size()) {
-                    cout << "\033[" << (input.size() - cursor) << "D";
-                }
-                cout.flush();
+                // ИСПРАВЛЕНО: используем нашу функцию подсветки вместо ручного cout
+                redraw_input(prompt, input, cursor);
             }
             continue;
         }
@@ -479,68 +473,52 @@ std::string read_input(const std::string& prompt) {
                     if (cursor > 0) {
                         cursor--;
                         cout << "\033[D";
+                        cout.flush();
                     }
                 }
-
                 // →
                 else if (third == 'C') {
                     if (cursor < input.size()) {
                         cursor++;
                         cout << "\033[C";
+                        cout.flush();
                     }
                 }
-
                 // Home
                 else if (third == 'H') {
                     if (cursor > 0) {
                         cout << "\033[" << cursor << "D";
                         cursor = 0;
+                        cout.flush();
                     }
                 }
-
                 // End
                 else if (third == 'F') {
                     if (cursor < input.size()) {
                         cout << "\033[" << (input.size() - cursor) << "C";
                         cursor = input.size();
-                    }
-                }
-
-                // Delete: ESC [ 3 ~
-                else if (third == '3') {
-                    getchar(); // '~'
-
-                    if (cursor < input.size()) {
-                        input.erase(cursor, 1);
-
-                        cout << "\r\033[2K"
-                             << prompt
-                             << input;
-
-                        if (cursor < input.size()) {
-                            cout << "\033[" << (input.size() - cursor) << "D";
-                        }
                         cout.flush();
                     }
                 }
+                // Delete: ESC [ 3 ~
+                else if (third == '3') {
+                    getchar(); // поглощаем '~'
+                    if (cursor < input.size()) {
+                        input.erase(cursor, 1);
+                        // ИСПРАВЛЕНО: используем нашу функцию подсветки
+                        redraw_input(prompt, input, cursor);
+                    }
+                }
             }
-
             continue;
         }
 
         // Обычный символ
         input.insert(cursor, 1, ch);
         cursor++;
-
-        cout << "\r\033[2K"
-             << prompt
-             << input;
-
-        if (cursor < input.size()) {
-            cout << "\033[" << (input.size() - cursor) << "D";
-        }
-
-        cout.flush();
+        
+        // ИСПРАВЛЕНО: используем нашу функцию подсветки вместо ручного cout
+        redraw_input(prompt, input, cursor);
     }
 
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
