@@ -7,6 +7,12 @@
 #include <vector>
 #include <iomanip>
 
+namespace Color {
+    const std::string pink = "\033[38;5;213m";
+    const std::string gray = "\033[38;5;245m";
+    const std::string reset = "\033[0m";
+}
+
 #ifdef _WIN32
 #include <Windows.h>
 void init_win_console();
