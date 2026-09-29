@@ -25,28 +25,34 @@ jobs:
           - os: macos-latest
             artifact_name: cat_shell_macOS
             cmd: g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell_macOS
-            
+
     runs-on: ${{ matrix.os }}
     steps:
-    - name: Скачиваем код
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Компиляция Cat-Shell
+    - name: Build Cat-Shell
       run: |
         ${{ matrix.cmd }}
 
-    - name: Проверка работоспособности (базовый запуск)
+    - name: Smoke test (non-Windows)
       if: runner.os != 'Windows'
       run: |
-        ./${{ matrix.artifact_name }} --help || echo "Сборка запускается корректно"
+        echo "exit" | ./${{ matrix.artifact_name }}
 
-    - name: Подготовка папки для артефактов
+    - name: Smoke test (Windows)
+      if: runner.os == 'Windows'
+      shell: bash
+      run: |
+        echo "exit" | ./${{ matrix.artifact_name }}
+
+    - name: Prepare artifact folder
       shell: bash
       run: |
         mkdir -p dist
         mv ${{ matrix.artifact_name }} dist/
 
-    - name: Временно сохраняем артефакт сборки
+    - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
         name: binary-${{ matrix.os }}
@@ -60,17 +66,17 @@ jobs:
       contents: write
     if: github.event_name == 'push'
     steps:
-    - name: Скачиваем код (нужен для работы с Git-тегами)
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Скачиваем все собранные бинарники
+    - name: Download all build artifacts
       uses: actions/download-artifact@v4
       with:
         pattern: binary-*
         path: release_assets
         merge-multiple: true
 
-    - name: Пересоздать тег main
+    - name: Recreate main tag
       shell: bash
       run: |
         git config user.name "github-actions[bot]"
@@ -81,12 +87,12 @@ jobs:
         git tag main
         git push origin refs/tags/main --force
 
-    - name: Загружаем три бинарника в Релиз GitHub
+    - name: Upload binaries to GitHub Release
       uses: softprops/action-gh-release@v2
       with:
         tag_name: main
         files: release_assets/*
         name: "Cat-Shell Rolling Build"
-        body: "Автоматическая сборка для Linux, Windows и macOS. Тег обновляется при каждом пуше в ветку main, затрагивающем исходный код."
+        body: "Automated build for Linux, Windows and macOS. The tag is updated on every push to main that touches source code."
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
