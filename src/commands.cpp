@@ -317,6 +317,8 @@ bool execute_command(const string &input, const vector<string>& history) {
     if (!argument.empty() && argument[0] == ' ') {
         argument.erase(0, 1);
     }
+
+    print_highlighted_command(command, argument);
     
     if (command == "exit") {
         cout << "Котик будет по тебе скучать(" << endl;
