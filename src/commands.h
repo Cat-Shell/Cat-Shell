@@ -26,6 +26,10 @@ void init_win_console();
 void wait_dots(const std::string &msg);
 void print_welcome();
 std::string get_prompt();
+void print_highlighted_command(
+    const std::string& command,
+    const std::string& argument
+);
 
 // Команды оболочки
 void cmd_mkdir(const std::string& argument);
