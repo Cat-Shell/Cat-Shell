@@ -19,11 +19,11 @@ int main() {
     vector<string> history;
 
     while (running) {
+        
+        string prompt = get_prompt();
         cout << get_prompt() << flush;
 
-        if (!getline(cin, input)) {
-            break;
-        }
+        input = read_input(prompt);
 
         if (!input.empty() && (history.empty() || history.back() != input)) {
             history.push_back(input);

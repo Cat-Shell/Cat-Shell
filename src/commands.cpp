@@ -10,6 +10,13 @@
 #include <random>
 #include <sstream>
 
+#ifdef _WIN32
+#include <conio.h>
+#else
+#include <termios.h>
+#include <unistd.h>
+#endif
+
 using namespace std;
 
 #ifdef _WIN32
@@ -304,6 +311,231 @@ void print_highlighted_command(
 
 }
 
+std::string read_input(const std::string& prompt) {
+    std::string input;
+    std::size_t cursor = 0;
+    char ch;
+
+#ifdef _WIN32
+
+    while (true) {
+        ch = _getch();
+
+        // Enter
+        if (ch == '\r') {
+            cout << '\n';
+            break;
+        }
+
+        // Backspace
+        if (ch == '\b') {
+            if (cursor > 0) {
+                input.erase(cursor - 1, 1);
+                cursor--;
+
+                cout << "\r\033[2K"
+                     << prompt
+                     << input;
+
+                if (cursor < input.size()) {
+                    cout << "\033[" << (input.size() - cursor) << "D";
+                }
+                cout.flush();
+            }
+            continue;
+        }
+
+        // Специальные клавиши Windows
+        if (ch == 0 || ch == 224) {
+            ch = _getch();
+
+            // ←
+            if (ch == 75) {
+                if (cursor > 0) {
+                    cursor--;
+                    cout << "\033[D";
+                }
+            }
+
+            // →
+            else if (ch == 77) {
+                if (cursor < input.size()) {
+                    cursor++;
+                    cout << "\033[C";
+                }
+            }
+
+            // Home
+            else if (ch == 71) {
+                if (cursor > 0) {
+                    cout << "\033[" << cursor << "D";
+                    cursor = 0;
+                }
+            }
+
+            // End
+            else if (ch == 79) {
+                if (cursor < input.size()) {
+                    cout << "\033[" << (input.size() - cursor) << "C";
+                    cursor = input.size();
+                }
+            }
+
+            // Delete
+            else if (ch == 83) {
+                if (cursor < input.size()) {
+                    input.erase(cursor, 1);
+
+                    cout << "\r\033[2K"
+                         << prompt
+                         << input;
+
+                    if (cursor < input.size()) {
+                        cout << "\033[" << (input.size() - cursor) << "D";
+                    }
+                    cout.flush();
+                }
+            }
+
+            continue;
+        }
+
+        // Обычный символ
+        input.insert(cursor, 1, ch);
+        cursor++;
+
+        cout << "\r\033[2K"
+             << prompt
+             << input;
+
+        if (cursor < input.size()) {
+            cout << "\033[" << (input.size() - cursor) << "D";
+        }
+
+        cout.flush();
+    }
+
+#else
+
+    termios oldt{};
+    termios newt{};
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    while (true) {
+        ch = getchar();
+
+        // Enter
+        if (ch == '\n') {
+            cout << '\n';
+            break;
+        }
+
+        // Backspace
+        if (ch == 127) {
+            if (cursor > 0) {
+                input.erase(cursor - 1, 1);
+                cursor--;
+
+                cout << "\r\033[2K"
+                     << prompt
+                     << input;
+
+                if (cursor < input.size()) {
+                    cout << "\033[" << (input.size() - cursor) << "D";
+                }
+                cout.flush();
+            }
+            continue;
+        }
+
+        // Escape sequence
+        if (ch == '\033') {
+            char second = getchar();
+
+            if (second == '[') {
+                char third = getchar();
+
+                // ←
+                if (third == 'D') {
+                    if (cursor > 0) {
+                        cursor--;
+                        cout << "\033[D";
+                    }
+                }
+
+                // →
+                else if (third == 'C') {
+                    if (cursor < input.size()) {
+                        cursor++;
+                        cout << "\033[C";
+                    }
+                }
+
+                // Home
+                else if (third == 'H') {
+                    if (cursor > 0) {
+                        cout << "\033[" << cursor << "D";
+                        cursor = 0;
+                    }
+                }
+
+                // End
+                else if (third == 'F') {
+                    if (cursor < input.size()) {
+                        cout << "\033[" << (input.size() - cursor) << "C";
+                        cursor = input.size();
+                    }
+                }
+
+                // Delete: ESC [ 3 ~
+                else if (third == '3') {
+                    getchar(); // '~'
+
+                    if (cursor < input.size()) {
+                        input.erase(cursor, 1);
+
+                        cout << "\r\033[2K"
+                             << prompt
+                             << input;
+
+                        if (cursor < input.size()) {
+                            cout << "\033[" << (input.size() - cursor) << "D";
+                        }
+                        cout.flush();
+                    }
+                }
+            }
+
+            continue;
+        }
+
+        // Обычный символ
+        input.insert(cursor, 1, ch);
+        cursor++;
+
+        cout << "\r\033[2K"
+             << prompt
+             << input;
+
+        if (cursor < input.size()) {
+            cout << "\033[" << (input.size() - cursor) << "D";
+        }
+
+        cout.flush();
+    }
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+
+#endif
+
+    return input;
+}
+
 bool execute_command(const string &input, const vector<string>& history) {
     if (input.empty()) return true;
     
@@ -317,8 +549,6 @@ bool execute_command(const string &input, const vector<string>& history) {
     if (!argument.empty() && argument[0] == ' ') {
         argument.erase(0, 1);
     }
-
-    print_highlighted_command(command, argument);
     
     if (command == "exit") {
         cout << "Котик будет по тебе скучать(" << endl;
