@@ -44,7 +44,7 @@ jobs:
       if: runner.os == 'Windows'
       shell: bash
       run: |
-        echo "exit" | ./${{ matrix.artifact_name }}
+        ./${{ matrix.artifact_name }} --help
 
     - name: Prepare artifact folder
       shell: bash
