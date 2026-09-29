@@ -316,10 +316,30 @@ void redraw_input(
     const std::string& input,
     std::size_t cursor
 ) {
-    cout << "\r\033[2K"
-         << prompt
-         << input;
+    cout << "\r\033[2K" << prompt;
 
+    std::size_t space_pos = input.find(' ');
+
+    if (space_pos == std::string::npos) {
+        // Введена только команда
+        cout << Color::command << input << Color::reset;
+    } else {
+        // Команда
+        cout << Color::command
+             << input.substr(0, space_pos)
+             << Color::reset;
+
+        // Пробел и аргумент
+        cout << input.substr(space_pos, input.size() - space_pos);
+
+        if (space_pos + 1 < input.size()) {
+            cout << Color::argument
+                 << input.substr(space_pos + 1)
+                 << Color::reset;
+        }
+    }
+
+    // Возвращаем курсор туда, где пользователь сейчас находится
     if (cursor < input.size()) {
         cout << "\033[" << (input.size() - cursor) << "D";
     }
