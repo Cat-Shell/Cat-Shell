@@ -331,5 +331,8 @@ bool execute_command(const string &input, const vector<string>& history) {
 
 string get_prompt() {
     string path = filesystem::current_path().string();
-    return "\033[38;5;213m🐱 Cat-Shell\033[0m \033[38;5;245m" + path + "\033[0m \033[38;5;213m❯\033[0m ";
+    
+    return Color::pink + "🐱 Cat-Shell" + Color::reset + " "
+        + Color::gray + path + Color::reset
+        + " " + Color::pink + "❯" + Color::reset + " ";
 }
