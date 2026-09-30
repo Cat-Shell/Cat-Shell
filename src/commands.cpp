@@ -301,6 +301,26 @@ void cmd_version() {
     cout << "Котик доволен своей версией\n";
 }
 
+void cmd_touch(const string& argument) {
+    if (argument.empty()) {
+        cout << "Cat-Shell: котик не нашел название файла. Возможно ты его не указал\n";
+        return;
+    }
+
+    if (filesystem::exists(argument)) {
+        cout << "Cat-Shell: файл \"" << argument << "\" уже существует, котик его не трогал\n";
+        return;
+    }
+
+    ofstream file(argument);
+    if (!file.is_open()) {
+        cout << "Cat-Shell: котик не смог создать файл \"" << argument << "\"\n";
+        return;
+    }
+    file.close(); 
+    cout << "Котик создал файл " << argument << endl;
+}
+
 void print_highlighted_command(
     const std::string& command,
     const std::string& argument
@@ -577,6 +597,7 @@ bool execute_command(const string &input, const vector<string>& history) {
     else if (command == "rmdir") cmd_rmdir(argument);
     else if (command == "rm") cmd_rm(argument);
     else if (command == "time") cmd_time();
+    else if (command == "touch") cmd_touch(argument);
     else {
         cout << "Cat-Shell: команда не найдена: " << command << "\n";
         cout << "Котик не нашел ее" << endl;
