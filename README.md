@@ -41,6 +41,7 @@ sudo cp cat_shell /usr/local/bin/
 | `rmdir [name]` | Delete an empty folder (asks for confirmation) |
 | `rm [file]` | Delete a file (asks for confirmation) |
 | `time`  | Show current date and time |
+| `touch [file]` | Create an empty file |
 | `exit`  | Exit the shell and say goodbye to the kitty |
 
 ---
@@ -72,6 +73,7 @@ sudo cp cat_shell /usr/local/bin/
   rmdir [name]    - удалить пустую папку
   rm [file]       - удалить файл
   time            - показать текущую дату и время
+  touch [file]    - создать пустой файл
   exit            - выйти из оболочки
 
 Примеры:
