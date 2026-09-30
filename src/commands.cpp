@@ -270,6 +270,7 @@ void cmd_help() {
     cout << R"(
 Доступные команды:
   help            - показать эту справку
+  version         - показать версию Cat-Shell
   history         - показать историю команд
   clear           - очистить экран
   meow            - мяукнуть
@@ -293,6 +294,11 @@ void cmd_help() {
   echo привет, котик
   cat readme.txt
 )";
+}
+
+void cmd_version() {
+    cout << "Cat-Shell v0.2.5\n";
+    cout << "Котик доволен своей версией\n";
 }
 
 void print_highlighted_command(
@@ -557,6 +563,7 @@ bool execute_command(const string &input, const vector<string>& history) {
     }
 
     if (command == "help") cmd_help();
+    else if (command == "version") cmd_version();
     else if (command == "history") cmd_history(history);
     else if (command == "clear") cmd_clear();
     else if (command == "meow") cmd_meow();

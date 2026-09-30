@@ -56,6 +56,7 @@ void cmd_echo(const std::string& argument);
 void cmd_cat(const std::string& argument);
 void cmd_time();
 void cmd_help();
+void cmd_version();
 
 // Обработчик команд
 bool execute_command(const std::string &input, const std::vector<std::string>& history);
