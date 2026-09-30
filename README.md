@@ -27,6 +27,7 @@ sudo cp cat_shell /usr/local/bin/
 | Command | Description |
 |---------|-------------|
 | `help`  | Show list of commands and help notes |
+| `version` | Show Cat-Shell version |
 | `history` | Show the history of entered commands |
 | `clear` | Clear the screen with a smooth wipe animation |
 | `meow`  | Make the kitty meow or purr randomly |
@@ -56,6 +57,7 @@ sudo cp cat_shell /usr/local/bin/
 
 Доступные команды:
   help            - показать эту справку
+  version         - показать версию Cat-Shell
   history         - показать историю команд
   clear           - очистить экран
   meow            - мяукнуть
