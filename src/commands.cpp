@@ -43,6 +43,47 @@ void init_win_console() {
 }
 #endif
 
+struct Cat {
+
+    int satiety = 100;
+    int happiness = 100;
+    int energy = 100;
+
+};
+
+Cat cat;
+
+auto last_cat_update = std::chrono::steady_clock::now();
+
+void update_cat() {
+
+    auto now = std::chrono::steady_clock::now();
+
+    auto seconds = std::chrono::duration_cast<
+        std::chrono::seconds
+    >(now - last_cat_update).count();
+
+    if (seconds < 10)
+        return;
+
+    int ticks = seconds / 10;
+
+    cat.satiety -= ticks * 2;
+    cat.energy -= ticks;
+    cat.happiness -= ticks;
+
+    if (cat.satiety < 0)
+        cat.satiety = 0;
+
+    if (cat.energy < 0)
+        cat.energy = 0;
+
+    if (cat.happiness < 0)
+        cat.happiness = 0;
+
+    last_cat_update = now;
+}
+
 // анимация трех точек
 void wait_dots(const string &msg) {
     cout << msg;
@@ -197,6 +238,119 @@ void cmd_pet(const string& argument) {
 ( o.o )
  > ^ <
 )" << "\n";
+    }
+}
+
+//
+// управление котиком
+void cmd_kitty(const string& argument) {
+
+    update_cat();
+
+    if (argument.empty() || argument == "status") {
+
+        cout << R"(
+ /\_/\\
+( o.o )
+ > ^ <
+)" << "\n";
+
+        cout << "Сытость:  " << cat.satiety << "/100\n";
+        cout << "Счастье:  " << cat.happiness << "/100\n";
+        cout << "Энергия:  " << cat.energy << "/100\n";
+
+        return;
+    }
+
+
+    if (argument == "feed") {
+
+        cat.satiety += 25;
+
+        if (cat.satiety > 100)
+            cat.satiety = 100;
+
+        cout << R"(
+ /\_/\\
+( ^.^ )
+ > ^ <
+)" << "\n";
+
+        cout << "Котик поел. Мррр...\n";
+        cout << "Сытость: " << cat.satiety << "/100\n";
+    }
+
+
+    else if (argument == "play") {
+
+        if (cat.energy < 20) {
+
+            cout << "Котик слишком устал для игры\n";
+            cout << "Пусть поспит: kitty sleep\n";
+
+            return;
+        }
+
+        cat.happiness += 20;
+        cat.energy -= 20;
+        cat.satiety -= 10;
+
+        if (cat.happiness > 100)
+            cat.happiness = 100;
+
+        if (cat.satiety < 0)
+            cat.satiety = 0;
+
+        cout << R"(
+ /\_/\\
+( >.< )
+ > ^ <
+)" << "\n";
+
+        cout << "Котик играет! Мяу!\n";
+    }
+
+
+    else if (argument == "sleep") {
+
+        cat.energy += 40;
+
+        if (cat.energy > 100)
+            cat.energy = 100;
+
+        cout << R"(
+ /\_/\\
+( -.- )
+ > ^ <
+)" << "\n";
+
+        cout << "Котик уснул... Zzz...\n";
+        cout << "Энергия: " << cat.energy << "/100\n";
+    }
+
+
+    else if (argument == "pet") {
+
+        cat.happiness += 10;
+
+        if (cat.happiness > 100)
+            cat.happiness = 100;
+
+        cout << R"(
+ /\_/\\
+( ^.^ )
+ > ^ <
+)" << "\n";
+
+        cout << "Котик довольно мурчит\n";
+        cout << "Счастье: " << cat.happiness << "/100\n";
+    }
+
+
+    else {
+
+        cout << "Cat-Shell: котик не знает такого действия\n";
+        cout << "Доступно: feed, play, sleep, pet, status\n";
     }
 }
 
@@ -746,6 +900,7 @@ bool execute_command(const string &input, const vector<string>& history) {
     else if (command == "pwd") cmd_pwd();
     else if (command == "ls") cmd_ls();
     else if (command == "pet") cmd_pet(argument);
+    else if (command == "kitty") cmd_kitty(argument);
     else if (command == "cd") cmd_cd(argument);
     else if (command == "mkdir") cmd_mkdir(argument);
     else if (command == "rmdir") cmd_rmdir(argument);
