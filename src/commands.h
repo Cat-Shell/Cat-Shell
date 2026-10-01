@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <cstddef>
 
+// коротко записанные цвета
 namespace Color {
     const std::string pink = "\033[38;5;213m";
     const std::string gray = "\033[38;5;245m";

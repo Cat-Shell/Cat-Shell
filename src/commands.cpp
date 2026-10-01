@@ -1,24 +1,25 @@
-#include "commands.h"
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <thread>
-#include <chrono>
-#include <cstdlib>
-#include <clocale>
-#include <limits>
-#include <random>
-#include <sstream>
+#include "commands.h" // подключает функции
+#include <filesystem> // работа с файлами
+#include <fstream> // чтение и запись файлов
+#include <iostream> // ввод и вывод
+#include <thread> // для sleep
+#include <chrono> // для времени и задержки
+#include <cstdlib> // систменые функции
+#include <clocale> // локаль и кодировка
+#include <limits> // ограничение типов
+#include <random> // для случайных цифр
+#include <sstream> // работа со строками как с потоками 
 
 #ifdef _WIN32
-#include <conio.h>
+#include <conio.h> // функции консоли windows
 #else
-#include <termios.h>
-#include <unistd.h>
+#include <termios.h> // Linux/Unix
+#include <unistd.h> // системные функции Linux/Unix
 #endif
 
 using namespace std;
 
+// для подсветки
 #ifdef _WIN32
 void init_win_console() {
     SetConsoleOutputCP(CP_UTF8);
@@ -35,6 +36,7 @@ void init_win_console() {
 }
 #endif
 
+// анимация трех точек
 void wait_dots(const string &msg) {
     cout << msg;
     for (int i = 0; i < 3; i++) {
@@ -45,6 +47,8 @@ void wait_dots(const string &msg) {
     cout << "\n";
 }
 
+
+// приветствие 
 void print_welcome() {
     cout << R"(
   /\_/\
@@ -55,6 +59,7 @@ void print_welcome() {
     cout << "Котик ждет твоей команды.\n\n";
 }
 
+// создать папку
 void cmd_mkdir(const string& argument) {
     if (argument.empty()) { 
         cout << "Cat-Shell: котик не нашел название папки. Возможно ты ее не указал\n";
@@ -71,15 +76,18 @@ void cmd_mkdir(const string& argument) {
     }
 }
 
+// удалить папку
 void cmd_rmdir(const string& argument) {
     if (argument.empty()) {
         cout << "Cat-Shell: котик не нашел название папки. Возможно ты ее не указал\n";
         return;
     }
 
+    // точно ли удалить папку
     cout << "Котик собирается удалить папку \"" << argument << "\". Ты уверен? [y/N]: ";
     cout.flush();
 
+    // получение ответа
     string answer;
     getline(cin, answer);
 
@@ -102,6 +110,7 @@ void cmd_rmdir(const string& argument) {
     }
 }
 
+// удаление файла
 void cmd_rm(const string& argument) {
     if (argument.empty()) {
         cout << "Cat-Shell: котик не нашел название файла. Возможно ты его не указал\n";
@@ -133,6 +142,7 @@ void cmd_rm(const string& argument) {
     }
 }
 
+// указать путь и перейти
 void cmd_cd(const string& argument) {
     if (argument.empty()) {
         cout << "Cat-Shell: котик не нашел путь, ибо ты его не указал.\n";
@@ -145,6 +155,8 @@ void cmd_cd(const string& argument) {
     }
 }
 
+// наша функция, не связанная с ориг терминалом
+// выводит эмоцию котика в зависимости от аргумента
 void cmd_kitty(const string& argument) {
     if (argument == "sleep") {
         cout << R"(
@@ -164,7 +176,7 @@ void cmd_kitty(const string& argument) {
 ( O.O )
  > ^ <
 )" << "\n";
-    } else {
+    } else {  // ! если ничего не ввел или (пофиксить) -> после аргумента пробел
         cout << R"(
  /\_/\
 ( o.o )
@@ -173,6 +185,7 @@ void cmd_kitty(const string& argument) {
     }
 }
 
+// показывает какие есть файлы
 void cmd_ls() {
     wait_dots("Котенок перебирает файлы");
     try {
@@ -184,10 +197,12 @@ void cmd_ls() {
     }
 }
 
+// показать путь
 void cmd_pwd() {
     cout << filesystem::current_path().string() << "\n";
 }
 
+// очистить все
 void cmd_clear() {
     wait_dots("Котик уже бежит все слизывать");
     #ifdef _WIN32
@@ -198,6 +213,7 @@ void cmd_clear() {
     print_welcome();
 }
 
+// показывает историю команд
 void cmd_history(const vector<string>& history) {
     if (history.empty()) {
         cout << "Котик пока ничего не запомнил" << endl;
@@ -208,11 +224,15 @@ void cmd_history(const vector<string>& history) {
     }
 }
 
+// наша функция
+// просто мяуканье
 void cmd_meow() {
+    // создание рандом числа
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> dist(1, 5);
 
+    // засовываем число в переменную для различных манипуляций (ну в нашем случае просто if/else)
     int number = dist(gen);
 
     if (number == 1) cout << "Мррр...\n";
@@ -222,10 +242,12 @@ void cmd_meow() {
     else cout << "мр~\n";
 }
 
+// и так понятно, тута просто выводит то, что написал в аргумент пользователь
 void cmd_echo(const string& argument) {
     cout << argument << "\n";
 }
 
+// выводит содержимое файла
 void cmd_cat(const string& argument) {
     if (argument.empty()) {
         cout << "Cat-Shell: котик не нашел название файла. Возможно ты его не указал\n";
@@ -238,6 +260,7 @@ void cmd_cat(const string& argument) {
         return;
     }
 
+    // вот тут и выводит
     string line;
     while (getline(file, line)) {
         cout << line << "\n";
@@ -265,6 +288,7 @@ void cmd_time() {
     cout << "Сейчас: " << put_time(&buf, "%Y-%m-%d %H:%M:%S") << "\n";
 }
 
+// и так ясно
 void cmd_help() {
     wait_dots("Котик торопится достать листок с подсказками");
     cout << R"(
@@ -297,11 +321,14 @@ void cmd_help() {
 )";
 }
 
+// версия проекта
 void cmd_version() {
     cout << "Cat-Shell v0.2.5\n";
     cout << "Котик доволен своей версией\n";
 }
 
+
+// создать файл
 void cmd_touch(const string& argument) {
     if (argument.empty()) {
         cout << "Cat-Shell: котик не нашел название файла. Возможно ты его не указал\n";
@@ -322,6 +349,7 @@ void cmd_touch(const string& argument) {
     cout << "Котик создал файл " << argument << endl;
 }
 
+// наверное, не нужная функция, ибо нсколько помню, оно нигде не используется
 void print_highlighted_command(
     const std::string& command,
     const std::string& argument
@@ -338,29 +366,32 @@ void print_highlighted_command(
 
 }
 
+// свой ввод команты и аргумента с подсветкой синтаксиса
+// я попросил ии сделать комментарии в этой функции
 void redraw_input(
     const std::string& prompt,
     const std::string& input,
     std::size_t cursor
 ) {
+    // Перерисовываем строку целиком
     cout << "\r\033[2K" << prompt;
 
     std::size_t space_pos = input.find(' ');
 
+    // Если пробела нет — вся строка считается командой
     if (space_pos == std::string::npos) {
-
         cout << Color::command
              << input
              << Color::reset;
-
     } else {
-
+        // До пробела красим как команду
         cout << Color::command
              << input.substr(0, space_pos)
              << Color::reset;
 
         cout << input.substr(space_pos, 1);
 
+        // Всё после пробела — аргументы
         if (space_pos + 1 < input.size()) {
             cout << Color::argument
                  << input.substr(space_pos + 1)
@@ -368,6 +399,7 @@ void redraw_input(
         }
     }
 
+    // Возвращаем курсор на нужную позицию
     if (cursor < input.size()) {
         cout << "\033[" << (input.size() - cursor) << "D";
     }
@@ -385,6 +417,7 @@ std::string read_input(const std::string& prompt) {
     while (true) {
         ch = _getch();
 
+        // Если ввод закончился
         if (ch == EOF) {
             cout << '\n';
             break;
@@ -401,7 +434,6 @@ std::string read_input(const std::string& prompt) {
             if (cursor > 0) {
                 input.erase(cursor - 1, 1);
                 cursor--;
-
                 redraw_input(prompt, input, cursor);
             }
             continue;
@@ -447,7 +479,6 @@ std::string read_input(const std::string& prompt) {
             else if (ch == 83) {
                 if (cursor < input.size()) {
                     input.erase(cursor, 1);
-
                     redraw_input(prompt, input, cursor);
                 }
             }
@@ -458,7 +489,6 @@ std::string read_input(const std::string& prompt) {
         // Обычный символ
         input.insert(cursor, 1, ch);
         cursor++;
-
         redraw_input(prompt, input, cursor);
     }
 
@@ -467,15 +497,16 @@ std::string read_input(const std::string& prompt) {
     termios oldt{};
     termios newt{};
 
+    // Отключаем обычный режим ввода и вывод символов
     tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
-
     newt.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
     while (true) {
         ch = getchar();
 
+        // Если ввод закончился
         if (ch == EOF) {
             cout << '\n';
             break;
@@ -500,10 +531,12 @@ std::string read_input(const std::string& prompt) {
         // Escape sequence
         if (ch == '\033') {
             char second = getchar();
+
             if (second == EOF) break;
 
             if (second == '[') {
                 char third = getchar();
+
                 if (third == EOF) break;
 
                 // ←
@@ -514,6 +547,7 @@ std::string read_input(const std::string& prompt) {
                         cout.flush();
                     }
                 }
+
                 // →
                 else if (third == 'C') {
                     if (cursor < input.size()) {
@@ -522,6 +556,7 @@ std::string read_input(const std::string& prompt) {
                         cout.flush();
                     }
                 }
+
                 // Home
                 else if (third == 'H') {
                     if (cursor > 0) {
@@ -530,6 +565,7 @@ std::string read_input(const std::string& prompt) {
                         cout.flush();
                     }
                 }
+
                 // End
                 else if (third == 'F') {
                     if (cursor < input.size()) {
@@ -538,25 +574,28 @@ std::string read_input(const std::string& prompt) {
                         cout.flush();
                     }
                 }
+
                 // Delete: ESC [ 3 ~
                 else if (third == '3') {
-                    getchar(); // поглощаем '~'
+                    getchar(); // Поглощаем '~'
+
                     if (cursor < input.size()) {
                         input.erase(cursor, 1);
                         redraw_input(prompt, input, cursor);
                     }
                 }
             }
+
             continue;
         }
 
         // Обычный символ
         input.insert(cursor, 1, ch);
         cursor++;
-
         redraw_input(prompt, input, cursor);
     }
 
+    // Возвращаем настройки терминала обратно
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 
 #endif
@@ -564,6 +603,7 @@ std::string read_input(const std::string& prompt) {
     return input;
 }
 
+// проверка команды
 bool execute_command(const string &input, const vector<string>& history) {
     if (input.empty()) return true;
     
@@ -607,6 +647,7 @@ bool execute_command(const string &input, const vector<string>& history) {
     return true;
 }
 
+// и так ясно)
 string get_prompt() {
     string path = filesystem::current_path().string();
     
