@@ -11,7 +11,7 @@ It's simple, playful, and perfect for learning or just for fun.
 
 ---
 
-🌐 **Website**: [cat-shell.github.io](https://cat-shell.github.io)
+🌐 **Website**: [cat-shell.github.io/Cat-Shell](https://cat-shell.github.io/Cat-Shell/)
 
 ## 📦 Installation
 
