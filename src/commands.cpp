@@ -19,6 +19,12 @@
 
 using namespace std;
 
+std::atomic<bool> g_interrupted{false};
+
+extern "C" void sigint_handler(int) {
+    g_interrupted = true;
+}
+
 // для подсветки
 #ifdef _WIN32
 void init_win_console() {
@@ -423,6 +429,14 @@ std::string read_input(const std::string& prompt) {
     while (true) {
         ch = _getch();
 
+        // Ctrl+C
+        if (ch == 0x03) {
+            input.clear();
+            cursor = 0;
+            cout << "^C\n";
+            return "";
+        }
+
         // Если ввод закончился
         if (ch == EOF) {
             cout << '\n';
@@ -511,7 +525,17 @@ std::string read_input(const std::string& prompt) {
 
     while (true) {
         ch = getchar();
-
+    
+        // Ctrl+C поймали через SIGINT
+        if (g_interrupted) {
+            g_interrupted = false;
+            input.clear();
+            cursor = 0;
+            cout << "^C\n";
+            tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+            return "";
+        }
+    
         // Если ввод закончился
         if (ch == EOF) {
             cout << '\n';

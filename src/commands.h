@@ -7,6 +7,11 @@
 #include <vector>
 #include <iomanip>
 #include <cstddef>
+#include <atomic>
+#include <csignal>
+
+extern std::atomic<bool> g_interrupted;
+extern "C" void sigint_handler(int);
 
 // коротко записанные цвета
 namespace Color {
