@@ -609,6 +609,68 @@ std::string read_input(const std::string& prompt) {
     return input;
 }
 
+// проверяет, есть ли команда в PATH
+bool command_exists(const string& cmd) {
+    namespace fs = std::filesystem;
+
+    // если путь абсолютный/относительный — просто проверим файл
+    if (cmd.find('/') != string::npos
+#ifdef _WIN32
+        || cmd.find('\\') != string::npos
+#endif
+    ) {
+        return fs::exists(cmd);
+    }
+
+    const char* path_env = getenv("PATH");
+    if (!path_env) return false;
+
+#ifdef _WIN32
+    const char sep = ';';
+    const vector<string> exts = {".exe", ".bat", ".cmd", ".com", ""};
+#else
+    const char sep = ':';
+    const vector<string> exts = {""};
+#endif
+
+    string path_str = path_env;
+    size_t start = 0, end;
+
+    auto check_dir = [&](const string& dir) -> bool {
+        for (const auto& ext : exts) {
+            fs::path candidate = fs::path(dir) / (cmd + ext);
+            if (fs::exists(candidate) && fs::is_regular_file(candidate)) {
+#ifndef _WIN32
+                auto perms = fs::status(candidate).permissions();
+                if ((perms & fs::perms::owner_exec) == fs::perms::none &&
+                    (perms & fs::perms::group_exec) == fs::perms::none &&
+                    (perms & fs::perms::others_exec) == fs::perms::none)
+                    continue;
+#endif
+                return true;
+            }
+        }
+        return false;
+    };
+
+    while ((end = path_str.find(sep, start)) != string::npos) {
+        if (check_dir(path_str.substr(start, end - start))) return true;
+        start = end + 1;
+    }
+    return check_dir(path_str.substr(start));
+}
+
+// запускает внешнюю команду целиком (имя + аргументы)
+void cmd_exec(const string& input) {
+    if (input.empty()) return;
+
+    int status = std::system(input.c_str());
+
+    if (status == -1) {
+        cout << "Cat-Shell: котик не смог запустить: " << input << "\n";
+    }
+}
+
 // проверка команды
 bool execute_command(const string &input, const vector<string>& history) {
     if (input.empty()) return true;
@@ -646,8 +708,13 @@ bool execute_command(const string &input, const vector<string>& history) {
     else if (command == "time") cmd_time();
     else if (command == "touch") cmd_touch(argument);
     else {
-        cout << "Cat-Shell: команда не найдена: " << command << "\n";
-        cout << "Котик не нашел ее" << endl;
+        // не встроенная — пробуем запустить как внешнюю
+        if (command_exists(command)) {
+            cmd_exec(input);
+        } else {
+            cout << "Cat-Shell: команда не найдена: " << command << "\n";
+            cout << "Котик не нашел ее" << endl;
+        }
     }
 
     return true;

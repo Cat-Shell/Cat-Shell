@@ -60,6 +60,10 @@ void cmd_help();
 void cmd_version();
 void cmd_touch(const std::string& argument);
 
+// Внешние команды
+bool command_exists(const std::string& cmd);
+void cmd_exec(const std::string& input);
+
 // Обработчик команд
 bool execute_command(const std::string &input, const std::vector<std::string>& history);
 
