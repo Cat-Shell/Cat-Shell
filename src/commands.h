@@ -54,6 +54,7 @@ void cmd_rm(const std::string& argument);
 void cmd_cd(const std::string& argument);
 void cmd_pet(const std::string& argument);
 void cmd_kitty(const std::string& argument);
+void print_cat_status();
 void cmd_ls();
 void cmd_pwd();
 void cmd_clear();

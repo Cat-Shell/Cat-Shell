@@ -55,6 +55,8 @@ Cat cat;
 
 auto last_cat_update = std::chrono::steady_clock::now();
 
+// обновляет состояние котика в зависимости от того,
+// сколько времени прошло с последнего обновления
 void update_cat() {
 
     auto now = std::chrono::steady_clock::now();
@@ -63,6 +65,7 @@ void update_cat() {
         std::chrono::seconds
     >(now - last_cat_update).count();
 
+    // каждые 10 секунд котик немного теряет состояние
     if (seconds < 10)
         return;
 
@@ -72,6 +75,7 @@ void update_cat() {
     cat.energy -= ticks;
     cat.happiness -= ticks;
 
+    // не даем значениям уйти ниже нуля
     if (cat.satiety < 0)
         cat.satiety = 0;
 
@@ -81,8 +85,19 @@ void update_cat() {
     if (cat.happiness < 0)
         cat.happiness = 0;
 
-    last_cat_update = now;
+    // сохраняем только реально прошедшие 10-секундные интервалы,
+    // чтобы не терять оставшиеся секунды
+    last_cat_update += std::chrono::seconds(ticks * 10);
 }
+
+// показывает текущее состояние котика
+void print_cat_status() {
+
+    cout << "Сытость:  " << cat.satiety << "/100\n";
+    cout << "Счастье:  " << cat.happiness << "/100\n";
+    cout << "Энергия:  " << cat.energy << "/100\n";
+}
+
 
 // анимация трех точек
 void wait_dots(const string &msg) {
@@ -241,12 +256,14 @@ void cmd_pet(const string& argument) {
     }
 }
 
-//
+// Cat-Shell команда
 // управление котиком
 void cmd_kitty(const string& argument) {
 
+    // обновляем состояние перед каждым действием
     update_cat();
 
+    // kitty и kitty status показывают состояние котика
     if (argument.empty() || argument == "status") {
 
         cout << R"(
@@ -255,20 +272,22 @@ void cmd_kitty(const string& argument) {
  > ^ <
 )" << "\n";
 
-        cout << "Сытость:  " << cat.satiety << "/100\n";
-        cout << "Счастье:  " << cat.happiness << "/100\n";
-        cout << "Энергия:  " << cat.energy << "/100\n";
+        print_cat_status();
 
         return;
     }
 
-
+    // покормить котика
     if (argument == "feed") {
 
         cat.satiety += 25;
+        cat.happiness += 5;
 
         if (cat.satiety > 100)
             cat.satiety = 100;
+
+        if (cat.happiness > 100)
+            cat.happiness = 100;
 
         cout << R"(
  /\_/\\
@@ -277,16 +296,26 @@ void cmd_kitty(const string& argument) {
 )" << "\n";
 
         cout << "Котик поел. Мррр...\n";
-        cout << "Сытость: " << cat.satiety << "/100\n";
+        print_cat_status();
     }
 
-
+    // поиграть с котиком
     else if (argument == "play") {
 
+        // для игры нужна хотя бы немного энергии
         if (cat.energy < 20) {
 
-            cout << "Котик слишком устал для игры\n";
+            cout << "Котик слишком устал для игры.\n";
             cout << "Пусть поспит: kitty sleep\n";
+
+            return;
+        }
+
+        // совсем голодный котик тоже не будет играть
+        if (cat.satiety < 10) {
+
+            cout << "Котик слишком голодный для игры.\n";
+            cout << "Сначала покорми его: kitty feed\n";
 
             return;
         }
@@ -308,15 +337,20 @@ void cmd_kitty(const string& argument) {
 )" << "\n";
 
         cout << "Котик играет! Мяу!\n";
+        print_cat_status();
     }
 
-
+    // уложить котика спать
     else if (argument == "sleep") {
 
         cat.energy += 40;
+        cat.satiety -= 5;
 
         if (cat.energy > 100)
             cat.energy = 100;
+
+        if (cat.satiety < 0)
+            cat.satiety = 0;
 
         cout << R"(
  /\_/\\
@@ -325,10 +359,10 @@ void cmd_kitty(const string& argument) {
 )" << "\n";
 
         cout << "Котик уснул... Zzz...\n";
-        cout << "Энергия: " << cat.energy << "/100\n";
+        print_cat_status();
     }
 
-
+    // погладить котика
     else if (argument == "pet") {
 
         cat.happiness += 10;
@@ -342,11 +376,11 @@ void cmd_kitty(const string& argument) {
  > ^ <
 )" << "\n";
 
-        cout << "Котик довольно мурчит\n";
-        cout << "Счастье: " << cat.happiness << "/100\n";
+        cout << "Котик довольно мурчит.\n";
+        print_cat_status();
     }
 
-
+    // неизвестное действие
     else {
 
         cout << "Cat-Shell: котик не знает такого действия\n";
@@ -469,6 +503,25 @@ void cmd_help() {
   time            - показать текущую дату и время
   clear           - очистить экран
   exit            - выйти из оболочки
+
+[Котик]:
+
+  kitty           - показать состояние котика
+  kitty status    - показать состояние котика
+  kitty feed      - покормить котика
+  kitty play      - поиграть с котиком
+  kitty sleep     - уложить котика спать
+  kitty pet       - погладить котика
+
+  Котик постепенно теряет сытость, энергию и счастье.
+
+Примеры:
+
+  kitty
+  kitty feed
+  kitty play
+  kitty sleep
+  kitty pet
 
 [Для работы]:  
   
