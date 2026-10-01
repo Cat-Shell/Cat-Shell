@@ -55,15 +55,23 @@ void wait_dots(const string &msg) {
 }
 
 
-// приветствие 
+// привествие 
 void print_welcome() {
-    cout << R"(
-  /\_/\
- ( o.o )
-  > ^ <   Cat-Shell v0.2.5
 
-)";
-    cout << "Котик ждет твоей команды.\n\n";
+    cout << Color::pink << R"(
+ /\_/\\
+( o.o )
+ > ^ <
+
+)" << Color::reset;
+
+    cout << Color::command
+         << "Cat-Shell v0.2.5"
+         << Color::reset << "\n";
+
+    cout << Color::pink
+         << "Котик ждет твоей команды."
+         << Color::reset << "\n\n";
 }
 
 // создать папку
@@ -336,10 +344,9 @@ void cmd_help() {
 
 // версия проекта
 void cmd_version() {
-    cout << "Cat-Shell v0.2.5\n";
-    cout << "Котик доволен своей версией\n";
+    cout << Color::command << "Cat-Shell v0.2.5" << Color::reset << "\n";
+    cout << Color::pink << "Котик доволен своей версией" << Color::reset << "\n";
 }
-
 
 // создать файл
 void cmd_touch(const string& argument) {
