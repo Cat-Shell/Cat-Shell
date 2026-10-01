@@ -172,7 +172,7 @@ void cmd_cd(const string& argument) {
 
 // наша функция, не связанная с ориг терминалом
 // выводит эмоцию котика в зависимости от аргумента
-void cmd_kitty(const string& argument) {
+void cmd_pet(const string& argument) {
     if (argument == "sleep") {
         cout << R"(
  /\_/\
@@ -330,7 +330,7 @@ void cmd_help() {
 
 [Команды Cat-Shell]: 
   meow            - мяукнуть
-  kitty [emotion] - показать котика с эмоцией
+  pet [emotion] - показать котика с эмоцией
                   emotions: sleep, happy, fright
 
 Примеры:
@@ -745,7 +745,7 @@ bool execute_command(const string &input, const vector<string>& history) {
     else if (command == "cat") cmd_cat(argument);
     else if (command == "pwd") cmd_pwd();
     else if (command == "ls") cmd_ls();
-    else if (command == "kitty") cmd_kitty(argument);
+    else if (command == "pet") cmd_pet(argument);
     else if (command == "cd") cmd_cd(argument);
     else if (command == "mkdir") cmd_mkdir(argument);
     else if (command == "rmdir") cmd_rmdir(argument);
