@@ -7,9 +7,17 @@
 
 using namespace std;
 
-// прверяет аргументы запуска, если передан --help --h, то показывает помощь и ливает
 int main(int argc, char* argv[]) {
+// какой то мусор но он важен вроде не трогайте пока
+#ifndef _WIN32
+    struct sigaction sa{};
+    sa.sa_handler = sigint_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(SIGINT, &sa, nullptr);
+#else
     std::signal(SIGINT, sigint_handler);
+#endif
 
 #ifdef _WIN32
     init_win_console();

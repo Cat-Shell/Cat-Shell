@@ -6,6 +6,7 @@
 #include <chrono> // для времени и задержки
 #include <cstdlib> // систменые функции
 #include <clocale> // локаль и кодировка
+#include <cerrno>
 #include <limits> // ограничение типов
 #include <random> // для случайных цифр
 #include <sstream> // работа со строками как с потоками 
@@ -523,24 +524,38 @@ std::string read_input(const std::string& prompt) {
     newt.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
+    // вспомогательная лямбда — читает один байт без перезапуска при EINTR
+    auto read_byte = [](char& out) -> int {
+        ssize_t n = read(STDIN_FILENO, &out, 1);
+        if (n == 1) return 1;      // успех
+        if (n == 0) return 0;      // EOF
+        return -1;                 // ошибка, включая EINTR
+    };
+
     while (true) {
-        ch = getchar();
-    
-        // Ctrl+C поймали через SIGINT
-        if (g_interrupted) {
-            g_interrupted = false;
-            input.clear();
-            cursor = 0;
-            cout << "^C\n";
-            tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-            return "";
+        char buf;
+        int r = read_byte(buf);
+
+        // Ctrl+C — read() прервался по EINTR
+        if (r == -1) {
+            if (g_interrupted) {
+                g_interrupted = false;
+                input.clear();
+                cursor = 0;
+                cout << "^C\n";
+                tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+                return "";
+            }
+            continue; // прочие EINTR/EAGAIN — просто повторяем
         }
-    
-        // Если ввод закончился
-        if (ch == EOF) {
+
+        // EOF (Ctrl+D)
+        if (r == 0) {
             cout << '\n';
             break;
         }
+
+        ch = buf;
 
         // Enter
         if (ch == '\n') {
@@ -560,14 +575,12 @@ std::string read_input(const std::string& prompt) {
 
         // Escape sequence
         if (ch == '\033') {
-            char second = getchar();
-
-            if (second == EOF) break;
+            char second;
+            if (read_byte(second) != 1) break;
 
             if (second == '[') {
-                char third = getchar();
-
-                if (third == EOF) break;
+                char third;
+                if (read_byte(third) != 1) break;
 
                 // ←
                 if (third == 'D') {
@@ -607,7 +620,8 @@ std::string read_input(const std::string& prompt) {
 
                 // Delete: ESC [ 3 ~
                 else if (third == '3') {
-                    getchar(); // Поглощаем '~'
+                    char tilde;
+                    read_byte(tilde); // поглощаем '~'
 
                     if (cursor < input.size()) {
                         input.erase(cursor, 1);
