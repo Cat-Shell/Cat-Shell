@@ -4,12 +4,13 @@
 #include <iostream> // ввод и вывод
 #include <thread> // для sleep
 #include <chrono> // для времени и задержки
-#include <cstdlib> // систменые функции
+#include <cstdlib> // систменые функции и std::getenv
 #include <clocale> // локаль и кодировка
 #include <cerrno>
 #include <limits> // ограничение типов
 #include <random> // для случайных цифр
 #include <sstream> // работа со строками как с потоками 
+#include <unistd.h> // Для getpid()
 
 #ifdef _WIN32
 #include <conio.h> // функции консоли windows
@@ -468,9 +469,63 @@ void cmd_meow() {
     else cout << "мр~\n";
 }
 
+// Функция-раскрывать для ВСЕХ переменных окружения
+string expand_all_variables(string input) {
+    // 1. Сначала железно чиним $$ (PID шелла)
+    size_t pid_pos = 0;
+    while ((pid_pos = input.find("$$", pid_pos)) != string::npos) {
+        string pid_str = to_string(getpid());
+        input.replace(pid_pos, 2, pid_str);
+        pid_pos += pid_str.length();
+    }
+
+    // 2. Ищем любые другие переменные ($USER, $PATH, $HOME и т.д.)
+    size_t i = 0;
+    while ((i = input.find('$', i)) != string::npos) {
+        // Проверяем, что это не одиночный $ на конце строки
+        if (i + 1 >= input.length()) {
+            i++;
+            continue;
+        }
+
+        // Если встретили второй $, который не обработался (мало ли), пропускаем
+        if (input[i + 1] == '$') {
+            i += 2;
+            continue;
+        }
+
+        // Выделяем имя переменной (идем вперед, пока идут буквы, цифры или подчеркивание)
+        size_t start = i + 1;
+        size_t len = 0;
+        while (start + len < input.length() && (isalnum(input[start + len]) || input[start + len] == '_')) {
+            len++;
+        }
+
+        if (len > 0) {
+            string var_name = input.substr(start, len);
+            
+            // Запрашиваем переменную у Linux
+            const char* env_val = getenv(var_name.c_str());
+            string replacement = (env_val != nullptr) ? string(env_val) : "";
+
+            // Подменяем $VAR на реальное значение в строке
+            input.replace(i, len + 1, replacement);
+            
+            // Сдвигаем индекс на длину вставленного значения, чтобы продолжить поиск
+            i += replacement.length();
+        } else {
+            // Если после $ идет символ, не являющийся именем (например, пробел), просто идем дальше
+            i++;
+        }
+    }
+    return input;
+}
+
 // и так понятно, тута просто выводит то, что написал в аргумент пользователь
 void cmd_echo(const string& argument) {
-    cout << argument << "\n";
+    // Пропускаем весь аргумент через глобальный кошачий раскрыватель переменных
+    string ready_output = expand_all_variables(argument);
+    cout << ready_output << "\n";
 }
 
 // выводит содержимое файла
