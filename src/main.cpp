@@ -4,6 +4,7 @@
 #include <vector>
 #include <clocale>
 #include <csignal>
+#include <cstdlib> // нужен для std::atexit
 
 using namespace std;
 
@@ -33,6 +34,20 @@ int main(int argc, char* argv[]) {
     }
 
     print_welcome();
+
+    // ! комментарии ии
+    // Загружаем состояние котика из файла, если он существует.
+    // Если файла нет, котик останется в стартовом состоянии 100/100/100.
+    load_cat_state();
+
+    // Дополнительная страховка:
+    // если программа завершается не через команду exit,
+    // а, например, обычным return из main, состояние тоже попробует сохраниться.
+    //
+    // Важно: std::atexit не спасает от SIGKILL, жесткого закрытия терминала
+    // или падения процесса. Поэтому мы также явно сохраняем состояние
+    // после действий kitty и команды exit.
+    std::atexit(save_cat_state);
 
     string input;
     bool running = true;

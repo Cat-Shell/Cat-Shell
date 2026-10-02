@@ -55,6 +55,8 @@ void cmd_cd(const std::string& argument);
 void cmd_pet(const std::string& argument);
 void cmd_kitty(const std::string& argument);
 void print_cat_status();
+void load_cat_state(); // загрузка и сохранение состояние котика
+void save_cat_state(); //   чтобы котик помнил себя между запусками
 void cmd_ls();
 void cmd_pwd();
 void cmd_clear();
