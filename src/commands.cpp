@@ -71,9 +71,23 @@ void update_cat() {
 
     int ticks = seconds / 10;
 
+    // базовая потеря состояния
     cat.satiety -= ticks * 2;
     cat.energy -= ticks;
-    cat.happiness -= ticks;
+
+    // если котик голодный — он быстрее грустит
+    if (cat.satiety < 20)
+        cat.happiness -= ticks * 2;
+    else
+        cat.happiness -= ticks;
+
+    // если котик совсем голодный — у него быстрее кончаются силы
+    if (cat.satiety == 0)
+        cat.energy -= ticks;
+
+    // если энергии совсем нет — котику становится очень грустно
+    if (cat.energy == 0)
+        cat.happiness -= ticks * 2;
 
     // не даем значениям уйти ниже нуля
     if (cat.satiety < 0)
@@ -89,6 +103,7 @@ void update_cat() {
     // чтобы не терять оставшиеся секунды
     last_cat_update += std::chrono::seconds(ticks * 10);
 }
+
 
 // показывает текущее состояние котика
 void print_cat_status() {
