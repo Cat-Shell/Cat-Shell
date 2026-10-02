@@ -10,7 +10,6 @@
 #include <limits> // ограничение типов
 #include <random> // для случайных цифр
 #include <sstream> // работа со строками как с потоками 
-#include <unistd.h> // Для getpid()
 #include <algorithm> // std::clamp
 
 #ifdef _WIN32
@@ -1207,7 +1206,7 @@ bool execute_command(const string &input, const vector<string>& history) {
 
         // перед выходом сохраняем финальное состояние котика
         save_cat_state();
-        
+
         cout << "Котик будет по тебе скучать(" << endl;
         return false;
     }
