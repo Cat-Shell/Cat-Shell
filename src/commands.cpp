@@ -130,7 +130,7 @@ void wait_dots(const string &msg) {
 void print_welcome() {
 
     cout << Color::pink << R"(
- /\_/\\
+ /\_/\
 ( o.o )
  > ^ <
 
