@@ -282,7 +282,7 @@ void cmd_kitty(const string& argument) {
     if (argument.empty() || argument == "status") {
 
         cout << R"(
- /\_/\\
+ /\_/\
 ( o.o )
  > ^ <
 )" << "\n";
@@ -305,7 +305,7 @@ void cmd_kitty(const string& argument) {
             cat.happiness = 100;
 
         cout << R"(
- /\_/\\
+ /\_/\
 ( ^.^ )
  > ^ <
 )" << "\n";
@@ -346,7 +346,7 @@ void cmd_kitty(const string& argument) {
             cat.satiety = 0;
 
         cout << R"(
- /\_/\\
+ /\_/\
 ( >.< )
  > ^ <
 )" << "\n";
@@ -368,7 +368,7 @@ void cmd_kitty(const string& argument) {
             cat.satiety = 0;
 
         cout << R"(
- /\_/\\
+ /\_/\
 ( -.- )
  > ^ <
 )" << "\n";
@@ -386,7 +386,7 @@ void cmd_kitty(const string& argument) {
             cat.happiness = 100;
 
         cout << R"(
- /\_/\\
+ /\_/\
 ( ^.^ )
  > ^ <
 )" << "\n";
