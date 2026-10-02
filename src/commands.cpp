@@ -312,6 +312,8 @@ void cmd_kitty(const string& argument) {
 
         cout << "Котик поел. Мррр...\n";
         print_cat_status();
+
+        return;
     }
 
     // поиграть с котиком
@@ -353,6 +355,8 @@ void cmd_kitty(const string& argument) {
 
         cout << "Котик играет! Мяу!\n";
         print_cat_status();
+
+        return;
     }
 
     // уложить котика спать
@@ -375,6 +379,8 @@ void cmd_kitty(const string& argument) {
 
         cout << "Котик уснул... Zzz...\n";
         print_cat_status();
+
+        return;
     }
 
     // погладить котика
@@ -393,6 +399,8 @@ void cmd_kitty(const string& argument) {
 
         cout << "Котик довольно мурчит.\n";
         print_cat_status();
+
+        return;
     }
 
     // неизвестное действие
