@@ -18,7 +18,7 @@ namespace Color {
     const std::string pink = "\033[38;5;213m";
     const std::string gray = "\033[38;5;245m";
 
-    const std::string command = "\033[38;5;99m"; // яркий индиго 
+    const std::string command = "\033[38;5;99m"; // яркий индиго
     const std::string argument = "\033[38;5;213m"; // розовый
 
     const std::string reset = "\033[0m";
