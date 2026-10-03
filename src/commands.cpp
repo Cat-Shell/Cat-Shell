@@ -689,14 +689,14 @@ string expand_all_variables(string input) {
 
         if (len > 0) {
             string var_name = input.substr(start, len);
-            
+
             // Запрашиваем переменную у Linux
             const char* env_val = getenv(var_name.c_str());
             string replacement = (env_val != nullptr) ? string(env_val) : "";
 
             // Подменяем $VAR на реальное значение в строке
             input.replace(i, len + 1, replacement);
-            
+
             // Сдвигаем индекс на длину вставленного значения, чтобы продолжить поиск
             i += replacement.length();
         } else {
@@ -788,7 +788,7 @@ void cmd_help() {
   kitty pet
 
 [Для работы]:  
-  
+
   echo [text]     - вывести текст на экран
   cat [file]      - вывести содержимое файла
   pwd             - показать текущий путь
@@ -847,7 +847,7 @@ void print_highlighted_command(
 ) {
 
     cout << Color::command << command << Color::reset;
-    
+
     if (!argument.empty()) {
         cout << " "
             << Color::argument << argument << Color::reset;
@@ -1252,7 +1252,7 @@ void cmd_exec(const string& input) {
 // проверка команды
 bool execute_command(const string &input, const vector<string>& history) {
     if (input.empty()) return true;
-    
+
     string command;
     string argument;
 
@@ -1263,7 +1263,7 @@ bool execute_command(const string &input, const vector<string>& history) {
     if (!argument.empty() && argument[0] == ' ') {
         argument.erase(0, 1);
     }
-    
+
     if (command == "exit") {
 
         // перед выходом сохраняем финальное состояние котика
@@ -1306,7 +1306,7 @@ bool execute_command(const string &input, const vector<string>& history) {
 // и так ясно)
 string get_prompt() {
     string path = filesystem::current_path().string();
-    
+
     return Color::pink + "🐱 Cat-Shell" + Color::reset + " "
         + Color::gray + path + Color::reset
         + " " + Color::pink + "❯" + Color::reset + " ";

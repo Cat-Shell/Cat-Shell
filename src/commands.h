@@ -40,7 +40,7 @@ std::string read_input(
     const std::string& prompt,
     const std::vector<std::string>& history
 );
- 
+
 void redraw_input(
     const std::string& prompt,
     const std::string& input,
