@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
         cout << prompt << flush;
 
         // считавает команду, которую ввел пользователь
-        input = read_input(prompt);
+        input = read_input(prompt, history);
 
         // если Ctrl+C прилетел во время ввода — не выполняем команду
         if (g_interrupted) {

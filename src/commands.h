@@ -36,9 +36,9 @@ std::string get_prompt();
 std::string read_input(const std::string& prompt);
 
 // свой ввод
-void print_highlighted_command(
-    const std::string& command,
-    const std::string& argument
+std::string read_input(
+    const std::string& prompt,
+    const std::vector<std::string>& history
 );
  
 void redraw_input(

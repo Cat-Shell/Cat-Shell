@@ -898,10 +898,28 @@ void redraw_input(
     cout.flush();
 }
 
-std::string read_input(const std::string& prompt) {
+std::string read_input(
+    const std::string& prompt,
+    const std::vector<std::string>& history
+) {
     std::string input;
     std::size_t cursor = 0;
     char ch;
+
+    // индекс навигации по истории.
+    // history.size() означает "мы не в истории" (текущий ввод)
+    int history_index = static_cast<int>(history.size());
+
+    // сохраняем текущий набранный текст, чтобы вернуть его,
+    // когда пользователь спустится вниз за пределы истории
+    std::string draft;
+
+    // вспомогательная лямбда: подставляет строку из истории
+    auto set_input = [&](const std::string& value) {
+        input = value;
+        cursor = input.size();
+        redraw_input(prompt, input, cursor);
+    };
 
 #ifdef _WIN32
 
@@ -916,7 +934,6 @@ std::string read_input(const std::string& prompt) {
             return "";
         }
 
-        // Если ввод закончился
         if (ch == EOF) {
             cout << '\n';
             break;
@@ -942,8 +959,33 @@ std::string read_input(const std::string& prompt) {
         if (ch == 0 || ch == 224) {
             ch = _getch();
 
+            // ↑ — вверх по истории
+            if (ch == 72) {
+                if (history_index == static_cast<int>(history.size())) {
+                    // запоминаем то, что пользователь набрал до входа в историю
+                    draft = input;
+                }
+                if (history_index > 0) {
+                    history_index--;
+                    set_input(history[history_index]);
+                }
+            }
+
+            // ↓ — вниз по истории
+            else if (ch == 80) {
+                if (history_index < static_cast<int>(history.size())) {
+                    history_index++;
+                    if (history_index == static_cast<int>(history.size())) {
+                        // вернулись к черновику
+                        set_input(draft);
+                    } else {
+                        set_input(history[history_index]);
+                    }
+                }
+            }
+
             // ←
-            if (ch == 75) {
+            else if (ch == 75) {
                 if (cursor > 0) {
                     cursor--;
                     cout << "\033[D";
@@ -996,25 +1038,23 @@ std::string read_input(const std::string& prompt) {
     termios oldt{};
     termios newt{};
 
-    // Отключаем обычный режим ввода и вывод символов
     tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
     newt.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
-    // вспомогательная лямбда — читает один байт без перезапуска при EINTR
     auto read_byte = [](char& out) -> int {
         ssize_t n = read(STDIN_FILENO, &out, 1);
-        if (n == 1) return 1;      // успех
-        if (n == 0) return 0;      // EOF
-        return -1;                 // ошибка, включая EINTR
+        if (n == 1) return 1;
+        if (n == 0) return 0;
+        return -1;
     };
 
     while (true) {
         char buf;
         int r = read_byte(buf);
 
-        // Ctrl+C — read() прервался по EINTR
+        // Ctrl+C
         if (r == -1) {
             if (g_interrupted) {
                 g_interrupted = false;
@@ -1024,7 +1064,7 @@ std::string read_input(const std::string& prompt) {
                 tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
                 return "";
             }
-            continue; // прочие EINTR/EAGAIN — просто повторяем
+            continue;
         }
 
         // EOF (Ctrl+D)
@@ -1060,8 +1100,31 @@ std::string read_input(const std::string& prompt) {
                 char third;
                 if (read_byte(third) != 1) break;
 
+                // ↑ — вверх по истории
+                if (third == 'A') {
+                    if (history_index == static_cast<int>(history.size())) {
+                        draft = input;
+                    }
+                    if (history_index > 0) {
+                        history_index--;
+                        set_input(history[history_index]);
+                    }
+                }
+
+                // ↓ — вниз по истории
+                else if (third == 'B') {
+                    if (history_index < static_cast<int>(history.size())) {
+                        history_index++;
+                        if (history_index == static_cast<int>(history.size())) {
+                            set_input(draft);
+                        } else {
+                            set_input(history[history_index]);
+                        }
+                    }
+                }
+
                 // ←
-                if (third == 'D') {
+                else if (third == 'D') {
                     if (cursor > 0) {
                         cursor--;
                         cout << "\033[D";
@@ -1099,7 +1162,7 @@ std::string read_input(const std::string& prompt) {
                 // Delete: ESC [ 3 ~
                 else if (third == '3') {
                     char tilde;
-                    read_byte(tilde); // поглощаем '~'
+                    read_byte(tilde);
 
                     if (cursor < input.size()) {
                         input.erase(cursor, 1);
@@ -1117,7 +1180,6 @@ std::string read_input(const std::string& prompt) {
         redraw_input(prompt, input, cursor);
     }
 
-    // Возвращаем настройки терминала обратно
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 
 #endif
