@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-// какой то мусор но он важен вроде не трогайте пока
+// какой-то мусор но он важен вроде не трогайте пока
 #ifndef _WIN32
     struct sigaction sa{};
     sa.sa_handler = sigint_handler;
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
         // выводит приглашение без задержки
         cout << prompt << flush;
 
-        // считавает команду, которую ввел пользователь
+        // считывает команду, которую ввел пользователь
         input = read_input(prompt, history);
 
         // если Ctrl+C прилетел во время ввода — не выполняем команду
@@ -75,11 +75,11 @@ int main(int argc, char* argv[]) {
             continue;
         }
 
-        // добавляет команду в историю, если оно не повторяет последнюю и если не пустая
+        // добавляет команду в историю, если она не повторяет последнюю и если не пустая
         if (!input.empty() && (history.empty() || history.back() != input)) {
             history.push_back(input);
         }
-        // выполняет команду и говорит, прордолжить ли или не
+        // выполняет команду и говорит, продолжить ли или не
         running = execute_command(input, history);
     }
 
