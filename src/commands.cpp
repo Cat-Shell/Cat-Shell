@@ -1296,7 +1296,7 @@ bool execute_command(const string &input, const vector<string>& history) {
             cmd_exec(input);
         } else {
             cout << "Cat-Shell: команда не найдена: " << command << "\n";
-            cout << "Котик не нашел ее" << endl;
+            cout << "Котик не нашел её" << endl;
         }
     }
 
