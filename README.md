@@ -94,6 +94,24 @@ sudo cp cat_shell /usr/local/bin/
 Котик будет по тебе скучать(
 ```
 
+## 📁 Project Files
+```text
+Cat-Shell/
+├── .github
+│   ├── FUNDING.yml
+│   └── workflows
+│       └── build.yml
+├── .gitignore
+├── LICENSE
+├── README.md
+├── index.html
+├── src
+│   ├── commands.cpp
+│   ├── commands.h
+│   └── main.cpp
+└── style.css
+```
+
 ---
 
 ## 💖 Support the Project
