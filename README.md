@@ -97,15 +97,15 @@ sudo cp cat_shell /usr/local/bin/
 ## 📁 Project Files
 ```text
 Cat-Shell/
-├── .github
+├── .github/
 │   ├── FUNDING.yml
-│   └── workflows
+│   └── workflows/
 │       └── build.yml
 ├── .gitignore
 ├── LICENSE
 ├── README.md
 ├── index.html
-├── src
+├── src/
 │   ├── commands.cpp
 │   ├── commands.h
 │   └── main.cpp
