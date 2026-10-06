@@ -18,13 +18,13 @@ jobs:
         include:
           - os: ubuntu-latest
             artifact_name: cat_shell_Linux
-            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell_Linux
+            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp src/cat.cpp -o cat_shell_Linux
           - os: windows-latest
             artifact_name: cat_shell_Windows.exe
-            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell_Windows.exe
+            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp src/cat.cpp -o cat_shell_Windows.exe
           - os: macos-latest
             artifact_name: cat_shell_macOS
-            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell_macOS
+            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp src/cat.cpp -o cat_shell_macOS
 
     runs-on: ${{ matrix.os }}
     steps:
