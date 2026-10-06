@@ -13,10 +13,11 @@
 #include <algorithm> // std::clamp
 
 #ifdef _WIN32
-#include <conio.h> // функции консоли windows
+#include <conio.h>   // функции консоли windows
+#include <process.h> // _getpid() на Windows
 #else
 #include <termios.h> // Linux/Unix
-#include <unistd.h> // системные функции Linux/Unix
+#include <unistd.h>  // системные функции Linux/Unix (getpid)
 #endif
 
 using namespace std;
@@ -660,7 +661,11 @@ string expand_all_variables(string input) {
     // 1. Сначала железно чиним $$ (PID шелла)
     size_t pid_pos = 0;
     while ((pid_pos = input.find("$$", pid_pos)) != string::npos) {
-        string pid_str = to_string(getpid());
+        #ifdef _WIN32
+            string pid_str = to_string(_getpid());
+        #else
+            string pid_str = to_string(getpid());
+        #endif
         input.replace(pid_pos, 2, pid_str);
         pid_pos += pid_str.length();
     }
