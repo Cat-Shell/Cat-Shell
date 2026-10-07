@@ -5,26 +5,30 @@ on:
     branches: [ "main" ]
     paths:
       - 'src/**'
+      - 'Makefile'
       - '.github/workflows/*.yml'
   pull_request:
     branches: [ "main" ]
     paths:
       - 'src/**'
+      - 'Makefile'
+      - '.github/workflows/*.yml'
 
 jobs:
   build-binaries:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
+            make: make
             artifact_name: cat_shell_Linux
-            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp src/cat.cpp -o cat_shell_Linux
           - os: windows-latest
+            make: mingw32-make
             artifact_name: cat_shell_Windows.exe
-            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp src/cat.cpp -o cat_shell_Windows.exe
           - os: macos-latest
+            make: make
             artifact_name: cat_shell_macOS
-            cmd: g++ -std=c++17 src/main.cpp src/commands.cpp src/cat.cpp -o cat_shell_macOS
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -32,13 +36,21 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build Cat-Shell
-      run: |
-        ${{ matrix.cmd }}
+      shell: bash
+      run: ${{ matrix.make }} CXXFLAGS="-std=c++17 -Wall -Wextra -Wpedantic -Werror -O2"
+
+    - name: Rename artifact
+      shell: bash
+      run: mv cat_shell* ${{ matrix.artifact_name }}
 
     - name: Smoke test (non-Windows)
       if: runner.os != 'Windows'
-      run: |
-        echo "exit" | ./${{ matrix.artifact_name }}
+      run: echo "exit" | ./${{ matrix.artifact_name }}
+
+    - name: Smoke test (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: '"exit" | .\${{ matrix.artifact_name }}'
 
     - name: Prepare artifact folder
       shell: bash
@@ -51,7 +63,7 @@ jobs:
       with:
         name: binary-${{ matrix.os }}
         path: dist/*
-        retention-days: 1
+        retention-days: 7
 
   publish-release:
     needs: build-binaries
@@ -70,21 +82,18 @@ jobs:
         path: release_assets
         merge-multiple: true
 
-    - name: Recreate main tag
+    - name: Update rolling tag
       shell: bash
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git tag -d main || true
-        git push origin :refs/tags/main || true
-        sleep 3
-        git tag main
-        git push origin refs/tags/main --force
+        git tag -f rolling
+        git push origin refs/tags/rolling --force
 
     - name: Upload binaries to GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: main
+        tag_name: rolling
         files: release_assets/*
         name: "Cat-Shell Rolling Build"
         body: "Automated build for Linux, Windows and macOS. The tag is updated on every push to main that touches source code."
