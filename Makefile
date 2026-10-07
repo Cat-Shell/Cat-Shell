@@ -16,4 +16,4 @@ $(OUT): $(SRC)
 	$(CXX) $(CXXFLAGS) $(SRC) -o $(OUT)
 
 clean:
-	rm -f $(OUT) cat_shell.exe
+	$(RM) $(OUT) cat_shell.exe
