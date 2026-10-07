@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++17 -Wall -Wextra
 SRC      = $(wildcard src/*.cpp)
 OUT      = cat_shell
 
-ifeq ($(OS), Windows_NT)
+ifeq ($(OS),Windows_NT)
     OUT := $(OUT).exe
 endif
 
