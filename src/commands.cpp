@@ -376,11 +376,15 @@ void cmd_pwd() {
 // очистить все
 void cmd_clear() {
     wait_dots("Котик уже бежит все слизывать");
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+#ifdef _WIN32
+    if (std::system("cls") == -1) {
+        std::cerr << "cat_shell: failed to clear screen\n";
+    }
+#else
+    if (std::system("clear") == -1) {
+        std::cerr << "cat_shell: failed to clear screen\n";
+    }
+#endif
     print_welcome();
 }
 
