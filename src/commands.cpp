@@ -670,7 +670,7 @@ std::string read_input(
 ) {
     std::string input;
     std::size_t cursor = 0;
-    char ch;
+    int ch;
 
     // индекс навигации по истории.
     // history.size() означает "мы не в истории" (текущий ввод)
