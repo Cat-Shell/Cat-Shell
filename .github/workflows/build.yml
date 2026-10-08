@@ -37,7 +37,12 @@ jobs:
 
     - name: Build Cat-Shell
       shell: bash
-      run: ${{ matrix.make }} CXXFLAGS="-std=c++17 -Wall -Wextra -Wpedantic -Werror -O2"
+      run: |
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          ${{ matrix.make }} CXXFLAGS="-std=c++17 -Wall -Wextra -Wpedantic -Werror -O2 -static -static-libgcc -static-libstdc++"
+        else
+          ${{ matrix.make }} CXXFLAGS="-std=c++17 -Wall -Wextra -Wpedantic -Werror -O2"
+        fi
 
     - name: Rename artifact
       shell: bash
