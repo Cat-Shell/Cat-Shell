@@ -5,7 +5,8 @@ SRC      = $(wildcard src/*.cpp)
 OUT      = cat_shell
 
 ifeq ($(OS),Windows_NT)
-    OUT := $(OUT).exe
+    OUT      := $(OUT).exe
+    CXXFLAGS += -static -static-libgcc -static-libstdc++
 endif
 
 .PHONY: all clean
