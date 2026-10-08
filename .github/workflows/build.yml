@@ -49,8 +49,8 @@ jobs:
 
     - name: Smoke test (Windows)
       if: runner.os == 'Windows'
-      shell: cmd
-      run: echo exit | ${{ matrix.artifact_name }}
+      shell: bash
+      run: ./$${{ matrix.artifact_name }} <<< "exit"
 
     - name: Prepare artifact folder
       shell: bash
