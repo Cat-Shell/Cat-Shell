@@ -98,17 +98,20 @@ sudo cp cat_shell /usr/local/bin/
 ```text
 Cat-Shell/
 ├── .github/
-│   ├── FUNDING.yml
-│   └── workflows/
-│       └── build.yml
+│   ├── FUNDING.yml
+│   └── workflows/
+│       └── build.yml
 ├── .gitignore
 ├── LICENSE
+├── Makefile
 ├── README.md
 ├── index.html
 ├── src/
-│   ├── commands.cpp
-│   ├── commands.h
-│   └── main.cpp
+│   ├── cat.cpp
+│   ├── cat.h
+│   ├── commands.cpp
+│   ├── commands.h
+│   └── main.cpp
 └── style.css
 ```
 
