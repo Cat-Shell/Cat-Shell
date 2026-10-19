@@ -22,6 +22,12 @@ g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell
 sudo cp cat_shell /usr/local/bin/
 ```
 
+On Windows, build with MinGW using the provided Makefile:
+
+```bash
+mingw32-make
+```
+
 ---
 
 ## 🎮 Commands
