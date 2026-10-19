@@ -9,7 +9,7 @@ ifeq ($(OS),Windows_NT)
     CXXFLAGS += -static -static-libgcc -static-libstdc++
 endif
 
-.PHONY: all clean
+.PHONY: all clean distclean
 
 all: $(OUT)
 
@@ -18,3 +18,6 @@ $(OUT): $(SRC)
 
 clean:
 	$(RM) $(OUT) cat_shell.exe
+
+distclean: clean
+	$(RM) $(OUT) cat_shell.exe *.o
