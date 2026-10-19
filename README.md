@@ -48,6 +48,14 @@ sudo cp cat_shell /usr/local/bin/
 
 ---
 
+## 💡 Tips
+
+- Commands are case-sensitive, so type them exactly as shown above.
+- Press `Ctrl+C` to interrupt the current command without leaving the shell.
+- Use `history` to recall what you have already tried.
+
+---
+
 ## 🧠 Example
 
 ```bash
