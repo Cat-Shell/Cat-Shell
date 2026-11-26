@@ -8,6 +8,7 @@
 #include <cstdlib> // систменые функции и std::getenv
 #include <clocale> // локаль и кодировка
 #include <cerrno>
+#include <cctype> // std::isalnum
 #include <limits> // ограничение типов
 #include <random> // для случайных цифр
 #include <sstream> // работа со строками как с потоками 
@@ -449,7 +450,8 @@ string expand_all_variables(string input) {
         // Выделяем имя переменной (идем вперед, пока идут буквы, цифры или подчеркивание)
         size_t start = i + 1;
         size_t len = 0;
-        while (start + len < input.length() && (isalnum(input[start + len]) || input[start + len] == '_')) {
+        while (start + len < input.length() &&
+               (std::isalnum(static_cast<unsigned char>(input[start + len])) || input[start + len] == '_')) {
             len++;
         }
 
