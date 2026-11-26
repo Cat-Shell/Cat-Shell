@@ -1036,9 +1036,9 @@ bool execute_command(const string &input, const vector<string>& history) {
     iss >> command;
 
     getline(iss, argument);
-    if (!argument.empty() && argument[0] == ' ') {
-        argument.erase(0, 1);
-    }
+    // убираем все ведущие пробелы/табы между командой и аргументом
+    const auto first = argument.find_first_not_of(" \t");
+    argument = (first == string::npos) ? "" : argument.substr(first);
 
     if (command == "exit") {
 
