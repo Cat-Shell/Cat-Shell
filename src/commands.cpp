@@ -124,7 +124,9 @@ void cmd_rmdir(const string& argument) {
     try {
         if (filesystem::remove(argument)) {
             cout << "Котик удалил папку " << argument << endl;
-        } 
+        } else {
+            cout << "Cat-Shell: котик не смог удалить папку \"" << argument << "\"\n";
+        }
     } catch (const filesystem::filesystem_error& e) {
         cout << "Котик обнаружил ошибку (возможно, папка не пуста): " << e.what() << endl;
     }
