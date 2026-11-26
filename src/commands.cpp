@@ -489,6 +489,12 @@ void cmd_cat(const string& argument) {
         return;
     }
 
+    error_code ec;
+    if (!filesystem::exists(argument, ec) || filesystem::is_directory(argument, ec) || ec) {
+        cout << "Cat-Shell: котик не смог открыть файл \"" << argument << "\"\n";
+        return;
+    }
+
     ifstream file(argument);
     if (!file.is_open()) {
         cout << "Cat-Shell: котик не смог открыть файл \"" << argument << "\"\n";
