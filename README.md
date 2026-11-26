@@ -41,7 +41,8 @@ mingw32-make
 | `meow`  | Make the kitty meow or purr randomly |
 | `echo [text]` | Print text to the screen |
 | `cat [file]` | Display the contents of a text file |
-| `kitty [emotion]` | Show ASCII kitty with an emotion (`sleep`, `happy`, `fright`) |
+| `kitty [action]` | Manage the cat: `status`, `feed`, `play`, `sleep`, `pet` |
+| `pet [emotion]` | Show ASCII kitty with an emotion (`sleep`, `happy`, `fright`) |
 | `pwd`   | Show current working directory |
 | `ls`    | List files and folders in the current directory |
 | `cd [path]` | Change the current working directory (write without quotes) |
@@ -149,63 +150,3 @@ Every little bit is appreciated! ❤️
 - **FelineFantasy** — [GitHub](https://github.com/FelineFantasy)
 - **SecDetxcoding** — [GitHub](https://github.com/SecDetxcoding)
 - **License**: MIT
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
