@@ -626,6 +626,12 @@ void cmd_touch(const string& argument) {
         return;
     }
 
+    error_code ec;
+    if (filesystem::is_directory(argument, ec)) {
+        cout << "Cat-Shell: \"" << argument << "\" — это папка, котик не станет создавать файл\n";
+        return;
+    }
+
     if (filesystem::exists(argument)) {
         cout << "Cat-Shell: файл \"" << argument << "\" уже существует, котик его не трогал\n";
         return;
