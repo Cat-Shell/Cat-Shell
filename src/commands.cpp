@@ -88,8 +88,10 @@ void cmd_mkdir(const string& argument) {
     try {
         if (filesystem::create_directory(argument)) {
             cout << "Котик создал папку " << argument << endl;
-        } else {
+        } else if (filesystem::is_directory(argument)) {
             cout << "Cat-Shell: твоя папка и так уже существует\n";
+        } else {
+            cout << "Cat-Shell: \"" << argument << "\" уже существует и не является папкой\n";
         }
     } catch (const filesystem::filesystem_error& e) {
         cout << "Котик обнаружил ошибку " << e.what() << endl;
