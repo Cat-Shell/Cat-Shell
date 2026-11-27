@@ -164,14 +164,38 @@ void cmd_rm(const string& argument) {
     }
 }
 
-// указать путь и перейти
+// домашняя директория пользователя для `cd` без аргумента
+static filesystem::path get_home_dir() {
+#ifdef _WIN32
+    const char* userprofile = getenv("USERPROFILE");
+    if (userprofile && *userprofile) return userprofile;
+
+    const char* drive = getenv("HOMEDRIVE");
+    const char* path = getenv("HOMEPATH");
+    if (drive && path && *drive && *path) return string(drive) + string(path);
+#else
+    const char* home = getenv("HOME");
+    if (home && *home) return home;
+#endif
+    return {};
+}
+
+// указать путь и перейти; без аргумента — в домашнюю папку
 void cmd_cd(const string& argument) {
+    filesystem::path target;
+
     if (argument.empty()) {
-        cout << "Cat-Shell: котик не нашел путь, ибо ты его не указал.\n";
-        return;
+        target = get_home_dir();
+        if (target.empty()) {
+            cout << "Cat-Shell: котик не смог найти домашнюю папку\n";
+            return;
+        }
+    } else {
+        target = argument;
     }
+
     try {
-        filesystem::current_path(argument);
+        filesystem::current_path(target);
     } catch (const filesystem::filesystem_error& e) {
         cout << "Котик обнаружил ошибку: " << e.what() << endl;
     }
