@@ -18,7 +18,7 @@ It's simple, playful, and perfect for learning or just for fun.
 ```bash
 git clone https://github.com/Cat-Shell/Cat-Shell
 cd Cat-Shell
-g++ -std=c++17 src/main.cpp src/commands.cpp -o cat_shell
+g++ -std=c++17 src/*.cpp -o cat_shell
 sudo cp cat_shell /usr/local/bin/
 ```
 
