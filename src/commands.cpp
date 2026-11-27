@@ -724,6 +724,15 @@ std::string read_input(
 #ifdef _WIN32
 
     while (true) {
+        // Ctrl+C может прийти как сигнал и не попасть в _getch()
+        if (g_interrupted) {
+            g_interrupted = false;
+            input.clear();
+            cursor = 0;
+            cout << "^C\n";
+            return "";
+        }
+
         ch = _getch();
 
         // Ctrl+C
